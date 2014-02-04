@@ -1,0 +1,71 @@
+<idea-plugin version="2">
+  <id>com.yourcompany.unique.plugin.id</id>
+  <name>Mathematica REPL</name>
+  <version>1.0</version>
+  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+  <description><![CDATA[
+      This plugin allows to connect Intelli JIdea to Mathematica Kernel<br>
+      and have minimal front-end to Mathematica session, control evalutaion <br>
+      and kernel.
+      ]]></description>
+
+  <change-notes><![CDATA[
+      Add change notes here.<br>
+      <small>most HTML tags may be used</small>
+      ]]>
+  </change-notes>
+
+  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="107.105"/>
+
+  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <depends>com.intellij.modules.lang</depends>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <project-components>
+    <!-- Add your project components here -->
+  </project-components>
+
+  <actions>
+    <!-- Add your actions here -->
+      <action id="MathREPL.MathREPLStartAction" class="MathREPLStartAction" text="Start REPL"
+              description="Starts Mathematica REPL">
+      </action>
+      <action id="MathREPL.MathREPLStartKernelAction" class="MathREPLStartKernelAction" text="Start Kernel"
+              description="Starts new Mathematica Kernel session">
+      </action>
+      <action id="MathREPL.MathREPLLoadFileAction" class="MathREPLLoadFileAction" text="Load File"
+              description="Loads file in Mathematica REPL">
+      </action>
+      <action id="MathREPL.MathREPLConfigure" class="MathREPLConfigureAction" text="Configure REPL"
+              description="Configures Mathematica REPL">
+      </action>
+      <action id="MathREPL.MathREPLTerminateKernelAction" class="MathREPLTerminateKernelAction" text="Terminate Kernel"
+              description="Terminates connection to the current Mathematica kernel">
+      </action>
+      <group class="MathREPLActionGroup"
+             id="MathREPLActionGroup"
+             text="Mathematica REPL"
+             description=""
+             icon="/resources/icon-run.png"
+             popup="true">
+          <separator/>
+          <reference id="MathREPL.MathREPLConfigureAction"/>
+          <reference id="MathREPL.MathREPLStartAction"/>
+          <reference id="MathREPL.MathREPLStartKernelAction"/>
+          <reference id="MathREPL.MathREPLLoadFileAction"/>
+          <reference id="MathREPL.MathREPLTerminateKernelAction"/>
+          <separator/>
+          <add-to-group group-id="ToolsMenu" anchor="last"/>
+      </group>
+  </actions>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+</idea-plugin>
