@@ -65,6 +65,11 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -73,57 +78,52 @@ import com.intellij.openapi.editor.ex.EditorEx;
 import com.wolfram.jlink.*;
 import java.awt.*;
 import java.awt.event.*;
-import com.wolfram.jlink.ui.ConsoleWindow;
-import com.wolfram.jlink.ui.SyntaxTokenizer;
-import com.wolfram.jlink.ui.BracketMatcher;
-import com.wolfram.jlink.ui.MathSessionPane;
+
 import sun.awt.VerticalBagLayout;
 
+
 public class MathREPLConsoleImpl {
-    MathSessionPane msp;
-
-
     private static final Logger LOG = Logger.getInstance("#" + MathREPLConsoleImpl.class.getName());
     private static final int SEPARATOR_THICKNESS = 1;
 
 
-
-    public MathSessionPane getMathSessionPane() {return msp;}
-
     public void run(String[] argv) {
         System.setProperty("java.library.path","/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86/");
 
-        msp = new MathSessionPane();
+
+
+        ///////////////////////////////////////
+
+        //Load math session pane class
+        URLClassLoader mathSessionPaneLoader;
+
+        MathSettings ms = MathSettings.getInstance();
+
+        // get the path to the JLink.jar
+        String filePath = ms.getMathLinkPath();
+
+        MathSessionWrapper.loadLibrary();
+        MathSessionWrapper msw = new MathSessionWrapper();
+
 
         // Create the frame window to hold the pane.
         Frame frm = new Frame();
         frm.setSize(500, 500);
-        frm.add(msp);
+        frm.add((JScrollPane)msw.getRootPanel());
         frm.setVisible(true);
         frm.doLayout();
 
-        frm.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                KernelLink ml = msp.getLink();
-                // If we're quitting while the kernel is busy, it might not die when the link
-                // is closed. So we force the issue by calling terminateKernel();
-                if (ml != null)
-                    ml.terminateKernel();
-                System.exit(0);
-            }
-        });
 
-
-        // Modify this for your setup.
-        msp.setLinkArgumentsArray(new String[] {"-linkmode","-d32", "launch", "-linkname", "\"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink"});
         try {
-            msp.connect();
-            msp.setSyntaxColoring(true);
-        } catch (MathLinkException e) {
+            msw.call("setLinkArgumentsArray", "-linkmode launch -linkname \"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink");
+            msw.call("connect");
+            msw.call("setSyntaxColoring",true);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-
     }
-
-
 }

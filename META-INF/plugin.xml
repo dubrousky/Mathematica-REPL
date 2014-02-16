@@ -42,7 +42,7 @@
       <action id="MathREPL.MathREPLLoadFileAction" class="MathREPLLoadFileAction" text="Load File"
               description="Loads file in Mathematica REPL">
       </action>
-      <action id="MathREPL.MathREPLConfigure" class="MathREPLConfigureAction" text="Configure REPL"
+      <action id="MathREPL.MathREPLConfigureAction" class="MathREPLConfigureAction" text="Configure REPL"
               description="Configures Mathematica REPL">
       </action>
       <action id="MathREPL.MathREPLTerminateKernelAction" class="MathREPLTerminateKernelAction" text="Terminate Kernel"
