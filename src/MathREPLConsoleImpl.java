@@ -97,10 +97,10 @@ public class MathREPLConsoleImpl {
         //Load math session pane class
         URLClassLoader mathSessionPaneLoader;
 
-        MathSettings ms = MathSettings.getInstance();
+        //MathSettings ms = MathSettings.getInstance();
 
         // get the path to the JLink.jar
-        String filePath = ms.getMathLinkPath();
+        //String filePath = ms.getMathLinkPath();
 
         MathSessionWrapper.loadLibrary();
         MathSessionWrapper msw = new MathSessionWrapper();

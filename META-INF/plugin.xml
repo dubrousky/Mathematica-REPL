@@ -66,6 +66,11 @@
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
+     <applicationConfigurable instance="MathREPLSettings"></applicationConfigurable>
+     <toolWindow id="Mathematica REPL"
+                 canCloseContents="true"
+                 icon="/resources/icon-run.png"
+                 anchor="right"
+                 factoryClass="MathREPLToolWindowFactory" />
   </extensions>
 </idea-plugin>

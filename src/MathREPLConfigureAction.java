@@ -1,7 +1,5 @@
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.ide.util.PropertiesComponent;
 import org.jetbrains.annotations.Nullable;
 
