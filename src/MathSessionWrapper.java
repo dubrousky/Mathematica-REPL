@@ -1,11 +1,9 @@
-import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,6 +39,16 @@ public class MathSessionWrapper {
              System.out.println(e.getMessage());
          }
      }
+
+
+     MathSessionWrapper(Object o)
+     {
+        if(null != implClass && o.getClass().isInstance(implClass) )
+        {
+            implObj = o;
+        }
+     }
+
      public Object getRootPanel()
      {
          return implObj;
@@ -53,13 +61,29 @@ public class MathSessionWrapper {
          {
              paramClasses.add(p.getClass());
          }
-         Method m = implMethods.get("methodName");
+         Method m = implMethods.get(methodName);
          if( null == m )
          {
-             m = implObj.getClass().getMethod(methodName, (Class[]) paramClasses.toArray());
-             implMethods.put(methodName,m);
+             if( paramClasses.isEmpty() )
+             {
+                 m = implObj.getClass().getMethod(methodName);
+             }
+             else
+             {
+                 // Use the necessary cast to [java.lang.Class
+                 Class[] classes = paramClasses.toArray(new Class[0]);
+                 m = implObj.getClass().getMethod(methodName,classes);
+             }
+             if(null != m) implMethods.put(methodName,m);
          }
-         m.invoke(implObj,params);
+         if(null != m )
+         {
+             m.invoke(implObj,params);
+         }
+         else
+         {
+             throw new NoSuchMethodException();
+         }
      }
      protected static void loadLibrary()
      {
