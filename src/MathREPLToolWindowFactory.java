@@ -13,16 +13,22 @@ import java.lang.reflect.InvocationTargetException;
 public class MathREPLToolWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(Project project, ToolWindow toolWindow) {
+        //Project currentProject = DataKeys.PROJECT.getData(actionEvent.getDataContext());
+        //VirtualFile currentFile = DataKeys.VIRTUAL_FILE.getData(actionEvent.getDataContext());
+        //Editor editor = DataKeys.EDITOR.getData(actionEvent.getDataContext());
+        //TODO: add explicit jar path to wrapper
         MathSessionWrapper.loadLibrary();
-        MathSessionWrapper msw = new MathSessionWrapper();
+        MathSessionWrapper msw = MathSessionWrapper.getSingleton();
 
         ContentManager cm = toolWindow.getContentManager();
         Content c = cm.getFactory().createContent((JScrollPane)msw.getRootPanel(),"MathREPL",true);
         cm.addContent(c);
         try {
-            msw.call("setLinkArgumentsArray", "-linkmode launch -linkname \"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink");
+            String args = "-linkmode launch -linkname \"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink";
+            msw.call("setLinkArguments",args);
             msw.call("connect");
-            msw.call("setSyntaxColoring",true);
+            msw.call("setSyntaxColoring",(boolean)true);
+            msw.call("setShowTiming",(boolean)false);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

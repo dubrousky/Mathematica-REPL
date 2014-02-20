@@ -67,6 +67,14 @@ public class MathREPLSettings implements Configurable {
     @Override
     public JComponent createComponent() {
         confInst = new ConfigCenterPanel();
+        // TODO: Initialize path defaults for different arch
+        //String defaultPath = "math";
+        // Again for conciseness we cheat and use undocumented J/Link OS-testing functions:
+        //if (Utils.isWindows())
+        //    defaultPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\4.2\\MathKernel";
+        //else if (Utils.isMacOSX())
+        //    defaultPath = "/Applications/Mathematica 4.2.app/Contents/MacOS/MathKernel";
+        //kernelField.setText(defaultPath);
         return confInst.getRootPanel();
     }
 

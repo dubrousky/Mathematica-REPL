@@ -103,7 +103,7 @@ public class MathREPLConsoleImpl {
         //String filePath = ms.getMathLinkPath();
 
         MathSessionWrapper.loadLibrary();
-        MathSessionWrapper msw = new MathSessionWrapper();
+        MathSessionWrapper msw = MathSessionWrapper.getSingleton();
 
 
         // Create the frame window to hold the pane.
@@ -115,9 +115,9 @@ public class MathREPLConsoleImpl {
 
 
         try {
-            msw.call("setLinkArgumentsArray", "-linkmode launch -linkname \"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink");
+            msw.call("setLinkArguments", "-linkmode launch -linkname \"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink");
             msw.call("connect");
-            msw.call("setSyntaxColoring",true);
+            msw.call("setSyntaxColoring",(boolean)true);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

@@ -40,6 +40,7 @@ public class MathREPLConfigureAction extends MathREPLBaseAction {
             PropertiesComponent pc = PropertiesComponent.getInstance();
             pc.setValue("mathkernel_path","");
             pc.setValue("native_library_path","");
+            pc.setValue("mathlink_path","");
             pc.setValue("connection_type","");
         }
     }
