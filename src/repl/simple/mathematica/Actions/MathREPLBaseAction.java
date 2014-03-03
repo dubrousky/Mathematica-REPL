@@ -1,3 +1,4 @@
+package repl.simple.mathematica.Actions;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.util.IconLoader;
 
@@ -7,6 +8,6 @@ import com.intellij.openapi.util.IconLoader;
 public abstract class MathREPLBaseAction extends AnAction {
     public MathREPLBaseAction() {
         super();
-        getTemplatePresentation().setIcon(IconLoader.findIcon("/resources/icon-run.png"));
+        getTemplatePresentation().setIcon(IconLoader.findIcon("/repl/simple/mathematica/resources/icon-run.png"));
     }
 }

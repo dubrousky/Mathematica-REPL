@@ -1,12 +1,12 @@
-import com.intellij.openapi.actionSystem.AnAction;
+package repl.simple.mathematica.Actions;
+
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.IconLoader;
+import repl.simple.mathematica.MathREPLConsoleImpl;
 
 public class MathREPLStartAction extends MathREPLBaseAction {
 

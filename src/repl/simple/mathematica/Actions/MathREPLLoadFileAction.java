@@ -1,17 +1,16 @@
-import com.intellij.openapi.actionSystem.AnAction;
+package repl.simple.mathematica.Actions;
+
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.util.IconLoader;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.wm.WindowManager;
-import com.intellij.openapi.wm.StatusBar;
-import com.intellij.openapi.actionSystem.DataKeys;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.ui.awt.RelativePoint;
 import com.intellij.openapi.ui.popup.Balloon;
-import com.intellij.openapi.ui.MessageType;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.wm.StatusBar;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.WindowManager;
+import com.intellij.ui.awt.RelativePoint;
+import repl.simple.mathematica.MathSessionWrapper;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -63,7 +62,7 @@ public class MathREPLLoadFileAction extends MathREPLBaseAction {
         //}
 
 
-        JScrollPane c = (JScrollPane)MathSessionWrapper.getSingleton().getRootPanel();
+        JScrollPane c = (JScrollPane) MathSessionWrapper.getSingleton().getRootPanel();
         JTextPane j = null;
         try {
             j = (JTextPane)c.getClass().getMethod("getTextPane").invoke(c);

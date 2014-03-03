@@ -1,3 +1,5 @@
+package repl.simple.mathematica;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -25,6 +27,7 @@ public class MathREPLToolWindowFactory implements ToolWindowFactory {
         cm.addContent(c);
         try {
             String args = "-linkmode launch -linkname \"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink";
+
             msw.call("setLinkArguments",args);
             msw.call("connect");
             msw.call("setSyntaxColoring",(boolean)true);

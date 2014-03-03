@@ -1,3 +1,4 @@
+package repl.simple.mathematica;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.lang.reflect.InvocationTargetException;
@@ -129,7 +130,7 @@ public class MathSessionWrapper {
          if( null == singleton )
          {
              jarPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
-             nativePath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86/";
+             nativePath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64/";
              System.setProperty("java.library.path",nativePath);
              URL myJarFile = null;
              try {

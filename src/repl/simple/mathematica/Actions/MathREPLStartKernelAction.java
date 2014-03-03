@@ -1,6 +1,6 @@
-import com.intellij.openapi.actionSystem.AnAction;
+package repl.simple.mathematica.Actions;
+
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.util.IconLoader;
 
 /**
  * Created by alex on 2/2/14.

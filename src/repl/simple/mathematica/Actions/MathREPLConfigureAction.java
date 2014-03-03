@@ -1,7 +1,10 @@
+package repl.simple.mathematica.Actions;
+
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.ide.util.PropertiesComponent;
 import org.jetbrains.annotations.Nullable;
+import repl.simple.mathematica.Ui.ConfigCenterPanel;
 
 import javax.swing.*;
 
