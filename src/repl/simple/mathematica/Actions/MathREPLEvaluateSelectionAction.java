@@ -19,8 +19,8 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by alex on 2/2/14.
  */
-public class MathREPLLoadFileAction extends MathREPLBaseAction {
-    public MathREPLLoadFileAction() {
+public class MathREPLEvaluateSelectionAction extends MathREPLBaseAction {
+    public MathREPLEvaluateSelectionAction() {
         super();
     }
     public void actionPerformed(AnActionEvent e) {

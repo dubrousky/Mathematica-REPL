@@ -39,14 +39,17 @@
       <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLStartKernelAction" class="repl.simple.mathematica.Actions.MathREPLStartKernelAction" text="Start Kernel"
               description="Starts new Mathematica Kernel session">
       </action>
-      <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLLoadFileAction" class="repl.simple.mathematica.Actions.MathREPLLoadFileAction" text="Load File"
-              description="Loads file in Mathematica REPL">
+      <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateSelectionAction" class="repl.simple.mathematica.Actions.MathREPLEvaluateSelectionAction" text="Evaluate Selection in REPL"
+              description="Loads and evaluates selection in Mathematica REPL">
       </action>
       <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLConfigureAction" class="repl.simple.mathematica.Actions.MathREPLConfigureAction" text="Configure REPL"
               description="Configures Mathematica REPL">
       </action>
       <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLTerminateKernelAction" class="repl.simple.mathematica.Actions.MathREPLTerminateKernelAction" text="Terminate Kernel"
               description="Terminates connection to the current Mathematica kernel">
+      </action>
+      <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateFileAction" class="repl.simple.mathematica.Actions.MathREPLEvaluateFileAction"
+              text="Evaluate File in REPL" description="Loads file and evaluates it in the REPL">
       </action>
       <group class="repl.simple.mathematica.MathREPLActionGroup"
              id="MathREPLActionGroup"
@@ -58,7 +61,7 @@
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLConfigureAction"/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLStartAction"/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLStartKernelAction"/>
-          <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLLoadFileAction"/>
+          <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateSelectionAction"/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLTerminateKernelAction"/>
           <separator/>
           <add-to-group group-id="ToolsMenu" anchor="last"/>
@@ -70,6 +73,8 @@
               icon="/repl/simple/mathematica/resources/icon-run.png"
               popup="true">
           <separator/>
+          <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateSelectionAction"/>
+          <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateFileAction"/>
           <separator/>
           <add-to-group group-id="EditorPopupMenu1" anchor="last"/>
       </group>
