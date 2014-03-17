@@ -94,6 +94,37 @@ public class MathSessionWrapper {
         }
     }
 
+    public Object apply(String methodName, Object ... params) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException
+    {
+        ArrayList<Class> paramClasses = new ArrayList<Class>();
+        for( Object p : params )
+        {
+            paramClasses.add(p.getClass());
+        }
+        Method m = null;//implMethods.get(methodName);
+        if( null == m )
+        {
+            if( paramClasses.isEmpty() )
+            {
+                m = implObj.getClass().getMethod(methodName);
+            }
+            else
+            {
+                // Use the necessary cast to [java.lang.Class
+                Class[] classes = paramClasses.toArray(new Class[0]);
+                m = implObj.getClass().getMethod(methodName,classes);
+            }
+            //if(null != m) implMethods.put(methodName,m);
+        }
+        if( null != m )
+        {
+            return m.invoke(implObj,params);
+        }
+        else
+        {
+            throw new NoSuchMethodException();
+        }
+    }
      public void call(String methodName, Object ... params) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException
      {
          ArrayList<Class> paramClasses = new ArrayList<Class>();

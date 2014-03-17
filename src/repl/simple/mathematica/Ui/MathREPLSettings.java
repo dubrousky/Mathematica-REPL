@@ -1,9 +1,11 @@
 package repl.simple.mathematica.Ui;
 
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
+import repl.simple.mathematica.OSUtils;
 
 import javax.swing.*;
 
@@ -35,11 +37,11 @@ public class MathREPLSettings implements Configurable {
         this.mathKernelPath = mathKernelPath;
     }
 
-    public String getNativeLibraryPath() {
+    public String getNativeLibPath() {
         return nativeLibraryPath;
     }
 
-    public void setNativeLibraryPath(String nativeLibraryPath) {
+    public void setNativeLibPath(String nativeLibraryPath) {
         this.nativeLibraryPath = nativeLibraryPath;
     }
 
@@ -51,7 +53,7 @@ public class MathREPLSettings implements Configurable {
         this.mathLinkPath = mathLinkPath;
     }
 
-    static ConfigCenterPanel confInst;
+    ConfigCenterPanel confInst;
 
     @Nls
     @Override
@@ -70,33 +72,88 @@ public class MathREPLSettings implements Configurable {
     public JComponent createComponent() {
         confInst = new ConfigCenterPanel();
         // TODO: Initialize path defaults for different arch
-        //String defaultPath = "math";
         // Again for conciseness we cheat and use undocumented J/Link OS-testing functions:
-        //if (Utils.isWindows())
-        //    defaultPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\4.2\\MathKernel";
-        //else if (Utils.isMacOSX())
-        //    defaultPath = "/Applications/Mathematica 4.2.app/Contents/MacOS/MathKernel";
-        //kernelField.setText(defaultPath);
+        switch(OSUtils.getOperatingSystemType())
+        {
+            case Windows:
+            {
+                mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\4.2\\MathKernel";
+                nativeLibraryPath = "";
+                mathLinkPath = "";
+            }
+            break;
+            case MacOS:
+            {
+                mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
+                nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
+                mathLinkPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
+            }
+            break;
+            case Linux:
+            default:
+            {
+                mathKernelPath = "/usr/local/bin/math";
+                nativeLibraryPath = "";
+                mathLinkPath = "";
+            }
+        }
+        PropertiesComponent pc = PropertiesComponent.getInstance();
+        confInst.setMathKernelPath(pc.getValue("repl.simple.mathematica.mathkernel_path",getMathKernelPath()));
+        confInst.setMathLinkPath(pc.getValue("repl.simple.mathematica.native_library_path",getNativeLibPath()));
+        confInst.setNativeLibPath(pc.getValue("repl.simple.mathematica.mathlink_path",getMathLinkPath()));
         return confInst.getRootPanel();
     }
 
     @Override
     public boolean isModified() {
-        return false;
+        return mathKernelPath != confInst.getMathKernelPath() || mathLinkPath != confInst.getMathLinkPath() || nativeLibraryPath != confInst.getNativeLibPath();
     }
 
     @Override
     public void apply() throws ConfigurationException {
-
+        // set values to be configured into the storage
+        // use them when connecting to the kernel
+        PropertiesComponent pc = PropertiesComponent.getInstance();
+        pc.setValue("repl.simple.mathematica.mathkernel_path",confInst.getMathKernelPath());
+        pc.setValue("repl.simple.mathematica.native_library_path",confInst.getNativeLibPath());
+        pc.setValue("repl.simple.mathematica.mathlink_path",confInst.getMathLinkPath());
     }
 
     @Override
     public void reset() {
-
+        // TODO: Initialize path defaults for different arch
+        switch(OSUtils.getOperatingSystemType())
+        {
+            case Windows:
+            {
+                mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\4.2\\MathKernel";
+                nativeLibraryPath = "";
+                mathLinkPath = "";
+            }
+            break;
+            case MacOS:
+            {
+                mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
+                nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
+                mathLinkPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
+            }
+            break;
+            case Linux:
+            default:
+            {
+                mathKernelPath = "/usr/local/bin/math";
+                nativeLibraryPath = "";
+                mathLinkPath = "";
+            }
+        }
+        PropertiesComponent pc = PropertiesComponent.getInstance();
+        pc.setValue("repl.simple.mathematica.mathkernel_path",getMathKernelPath());
+        pc.setValue("repl.simple.mathematica.native_library_path",getNativeLibPath());
+        pc.setValue("repl.simple.mathematica.mathlink_path",getMathLinkPath());
     }
 
     @Override
     public void disposeUIResources() {
-
+        confInst = null;
     }
 }

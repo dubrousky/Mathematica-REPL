@@ -1,8 +1,8 @@
 <idea-plugin version="2">
-  <id>com.yourcompany.unique.plugin.id</id>
+  <id>repl.simple.mathematica.id</id>
   <name>Mathematica REPL</name>
   <version>0.0.1</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="dubrousky@gmail.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
   <description><![CDATA[
       This plugin allows to connect Intelly JIdea to Mathematica Kernel<br>

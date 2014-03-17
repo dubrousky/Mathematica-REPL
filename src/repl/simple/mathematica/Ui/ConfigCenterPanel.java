@@ -65,12 +65,12 @@ public class ConfigCenterPanel {
         });
     }
 
-    public JPanel getRootPanel()
-    {
-        return rootPanel;
-    }
+    public JPanel getRootPanel() { return rootPanel; }
     public String getMathLinkPath() { return mathLinkPath.getText(); }
     public String getMathKernelPath() { return  mathKernelPath.getText(); }
     public String getNativeLibPath() { return nativeLibPath.getText(); }
+    public void setMathLinkPath(String path) { mathLinkPath.setText(path); }
+    public void setMathKernelPath(String path) { mathKernelPath.setText(path); }
+    public void setNativeLibPath(String path) { nativeLibPath.setText(path); }
 
 }

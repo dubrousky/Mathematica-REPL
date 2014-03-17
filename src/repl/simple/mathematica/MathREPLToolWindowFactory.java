@@ -5,6 +5,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
+import repl.simple.mathematica.Actions.MathREPLStartKernelAction;
 
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
@@ -32,6 +33,8 @@ public class MathREPLToolWindowFactory implements ToolWindowFactory {
             msw.call("connect");
             //msw.call("setSyntaxColoring",(boolean)true);
             //msw.call("setShowTiming",(boolean)false);
+            // TODO: set start action to false
+            MathREPLStartKernelAction.setEnabled(false);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
