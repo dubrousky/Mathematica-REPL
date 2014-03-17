@@ -30,8 +30,8 @@ public class MathREPLToolWindowFactory implements ToolWindowFactory {
 
             msw.call("setLinkArguments",args);
             msw.call("connect");
-            msw.call("setSyntaxColoring",(boolean)true);
-            msw.call("setShowTiming",(boolean)false);
+            //msw.call("setSyntaxColoring",(boolean)true);
+            //msw.call("setShowTiming",(boolean)false);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -40,4 +40,5 @@ public class MathREPLToolWindowFactory implements ToolWindowFactory {
             e.printStackTrace();
         }
     }
+
 }
