@@ -80,6 +80,7 @@ public class MathREPLEvaluateSelectionAction extends MathREPLBaseAction {
             // so it is ready to accept keystrokes. We want to do this after the pane has finished
             // preparing itself (which happens on the Swing UI thread via invokeLater()), so we
             // need to use invokeLater() ourselves.
+            // TODO: Change SwingUtilities.invokeLater to the correct way: ApplicationManager.getApplication().invokeLater()
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     jc.requestFocus();

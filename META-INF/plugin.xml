@@ -33,6 +33,10 @@
 
   <actions>
     <!-- Add your actions here -->
+      <action class="repl.simple.mathematica.Actions.AboutAction" text="About Mathematica REPL plugin..."
+              id="MathREPL.repl.simple.mathematica.Actions.AboutAction">
+      <add-to-group group-id="HelpMenu" anchor="before" relative-to-action="About"/>
+      </action>
       <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLStartAction" class="repl.simple.mathematica.Actions.MathREPLStartAction" text="Start REPL"
               description="Starts Mathematica REPL">
       </action>
@@ -81,6 +85,7 @@
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
+     <errorHandler implementation="repl.simple.mathematica.ErrorReporter"/>
      <applicationConfigurable instance="repl.simple.mathematica.Ui.MathREPLSettings"></applicationConfigurable>
      <toolWindow id="Mathematica REPL"
                  canCloseContents="true"

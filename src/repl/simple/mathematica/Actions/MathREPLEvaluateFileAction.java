@@ -7,6 +7,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
  */
 public class MathREPLEvaluateFileAction extends MathREPLBaseAction {
     public void actionPerformed(AnActionEvent e) {
-        // TODO: insert action logic here
+        // TODO: insert action logic here:
+        // Open file selection, read through the link
+        // Wait for response
     }
 }

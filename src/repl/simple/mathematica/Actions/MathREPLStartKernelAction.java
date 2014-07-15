@@ -1,6 +1,8 @@
 package repl.simple.mathematica.Actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.ui.MessageType;
+import repl.simple.mathematica.MathREPLMessages;
 import repl.simple.mathematica.MathSessionWrapper;
 
 import java.lang.reflect.InvocationTargetException;
@@ -8,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by alex on 2/2/14.
  */
-public class MathREPLStartKernelAction extends MathREPLBaseAction {
+public class MathREPLStartKernelAction extends MathREPLKernelAction {
 
     public MathREPLStartKernelAction() {
         super();
@@ -28,14 +30,15 @@ public class MathREPLStartKernelAction extends MathREPLBaseAction {
         // TODO: find toolbar, get math wrapper and call method connect with the parameters stored
         // TODO: disable action and enable terminate
         enabled = false;
+        // TODO: get link status
         MathSessionWrapper msw = MathSessionWrapper.getSingleton();
         if(null != msw)
         {
             String args = "-linkmode launch -linkname \"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink";
-
             try {
                 msw.call("setLinkArguments",args);
                 msw.call("connect");
+                balloonMessage(e, MessageType.INFO ,MathREPLMessages.kernelStarted);
             } catch (NoSuchMethodException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException ex) {
