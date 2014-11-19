@@ -3,15 +3,16 @@
 ### Mathematica REPL ###
 
 * This repository contains a proof-of-concept of a plugin for IntellyJIdea(TM) IDE for Wolfram Mathematica(TM) development
-* The idea is to have a wrapper plugin around the JLink library to be able to execute Mathematica code from IntellyJIdea (TM) IDE having the Mathematica installationin the system. JLink provides the way to interface the 3rd party programs to Mathematica and vice versa. The plugin uses reflection to avoid a compile time dependency on the JLink library.  
+* The idea is to have a wrapper plugin around the JLink library to be able to execute Mathematica code from IntellyJIdea (TM) IDE having the Mathematica installationin the system. JLink provides the way to interface the 3rd party programs to Mathematica and vice versa. The plugin uses reflection to avoid a compile time dependency on the JLink library. 
+* Recent updates: the plugin works with the most rescent version of the Mathematica (10.0.1 at the time). The previous issue with the naitive libraries is gone. Connection to Mathematica(TM) works out of the box for Mac OS X 10.10. 
 
 ### How do I get set up? ###
 
 * Dependencies:
   
-  * Wolfram Mathematica 7 (Other versions were not tested)
+  * Wolfram Mathematica 7, 10 (Other versions were not tested)
   
-  * IntellyJIdea IDE installed ( Community Edition tested)
+  * IntellyJIdea IDE installed ( Community Edition 13 tested)
   
   * IntellyJIdea SDK 
 
