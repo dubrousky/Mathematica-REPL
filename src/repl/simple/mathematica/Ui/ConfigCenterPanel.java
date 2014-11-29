@@ -18,6 +18,7 @@ public class ConfigCenterPanel {
     JButton button1;
     JButton button2;
     JButton button3;
+    private JTextField mathLinkArgs;
 
     public ConfigCenterPanel() {
         button1.addActionListener(new ActionListener() {

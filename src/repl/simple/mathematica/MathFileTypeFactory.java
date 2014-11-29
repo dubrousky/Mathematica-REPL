@@ -9,6 +9,6 @@ import org.jetbrains.annotations.NotNull;
 public class MathFileTypeFactory extends FileTypeFactory{
     @Override
     public void createFileTypes(@NotNull FileTypeConsumer fileTypeConsumer) {
-        fileTypeConsumer.consume(MathFileType.INSTANCE, "m");
+        fileTypeConsumer.consume(MathFileType.INSTANCE, "mws");
     }
 }

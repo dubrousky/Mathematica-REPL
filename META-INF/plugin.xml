@@ -2,17 +2,25 @@
   <id>repl.simple.mathematica.id</id>
   <name>Mathematica REPL</name>
   <version>0.0.1</version>
-  <vendor email="dubrousky@gmail.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="dubrousky@gmail.com" url="https://github.com/dubrousky/Mathematica-REPL/wiki">dubrousky</vendor>
 
   <description><![CDATA[
-      This plugin allows to connect Intelly JIdea to Mathematica Kernel<br>
-      and have minimal front-end to Mathematica session, control evalutaion <br>
+      This plugin allows to connect IntellyJ Idea(TM) to Mathematica(TM) Kernel<br>
+      and have minimal front-end to Mathematica session, control evaluation <br>
       and kernel.
       ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <small>most HTML tags may be used</small>
+      Change notes.<br>
+      <small>
+      <ul>
+        <li>Added resource files using the resource bundles.</li>
+        <li>Refactored action system.</li>
+        <li>Added some actions to the context menu.</li>
+        <li>Added About action</li>
+        <li>Added error reporting dialog</li>
+      </ul>
+      </small>
       ]]>
   </change-notes>
 
@@ -37,9 +45,6 @@
               id="MathREPL.repl.simple.mathematica.Actions.AboutAction">
       <add-to-group group-id="HelpMenu" anchor="before" relative-to-action="About"/>
       </action>
-      <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLStartAction" class="repl.simple.mathematica.Actions.MathREPLStartAction" text="Start REPL"
-              description="Starts Mathematica REPL">
-      </action>
       <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLStartKernelAction" class="repl.simple.mathematica.Actions.MathREPLStartKernelAction" text="Start Kernel"
               description="Starts new Mathematica Kernel session">
       </action>
@@ -55,6 +60,12 @@
       <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateFileAction" class="repl.simple.mathematica.Actions.MathREPLEvaluateFileAction"
               text="Evaluate File in REPL" description="Loads file and evaluates it in the REPL">
       </action>
+      <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLHelpSelectedSymbol" class="repl.simple.mathematica.Actions.MathREPLHelpSelectedSymbol"
+              text="Find info for symbol" description="Searches help info for selected symbol">
+      </action>
+      <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLNewSession" class="repl.simple.mathematica.Actions.MathREPLNewSession"
+              text="New Session" description="Starts new session">
+      </action>
       <group class="repl.simple.mathematica.MathREPLActionGroup"
              id="MathREPLActionGroup"
              text="Mathematica REPL"
@@ -63,7 +74,7 @@
              popup="true">
           <separator/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLConfigureAction"/>
-          <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLStartAction"/>
+          <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLNewSession"/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLStartKernelAction"/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateSelectionAction"/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLTerminateKernelAction"/>
@@ -78,6 +89,7 @@
               popup="true">
           <separator/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateSelectionAction"/>
+          <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLHelpSelectedSymbol"/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateFileAction"/>
           <separator/>
           <add-to-group group-id="EditorPopupMenu1" anchor="last"/>
@@ -92,5 +104,6 @@
                  icon="/repl/simple/mathematica/resources/icon-run.png"
                  anchor="right"
                  factoryClass="repl.simple.mathematica.MathREPLToolWindowFactory" />
+     <fileTypeFactory implementation="repl.simple.mathematica.MathFileTypeFactory"/>
   </extensions>
 </idea-plugin>

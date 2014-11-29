@@ -18,19 +18,19 @@ public class MathFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getName() {
-        return "Mathematica file";
+        return "Workspace File";
     }
 
     @NotNull
     @Override
     public String getDescription() {
-        return "Mathematica language file";
+        return "Mathematica REPL workspace";
     }
 
     @NotNull
     @Override
     public String getDefaultExtension() {
-        return "m";
+        return "mws";
     }
 
     @Nullable

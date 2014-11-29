@@ -10,7 +10,12 @@ import repl.simple.mathematica.OSUtils;
 import javax.swing.*;
 
 /**
- * Created by alex on 2/5/14.
+ * This class implements the plugins configuration panel
+ * and allows to configure the paths to the MathKernel executable
+ * and JLink libraries installed in the system.
+ *
+ * Plugin will pick up the paths to modify the the java system library path
+ * to loa the JLink.jar
  */
 public class MathREPLSettings implements Configurable {
     //Creation of Extension to applicationConfigurable
@@ -25,14 +30,25 @@ public class MathREPLSettings implements Configurable {
     //        disposeUIResources: this method is called when the user closes the form. In this method, you can, for example, release the resources used by the form.
     //In the plugin configuration file plugin.xml, create the <extensions defaultExtensionNs="com.intellij"> </extensions> section.
     //        To this section, add the <applicationConfigurable instance=%MyJavaClassName%></applicationConfigurable> section, where the %MyJavaClassName% refers to the name of your Java class implementing the Configurable interface (see Step 1).
+    // Path to the MathKernel executable path
     private String mathKernelPath;
+    // Path to the native library directory
     private String nativeLibraryPath;
+    // Path to the JLink.jar path
     private String mathLinkPath;
 
+    /**
+     * Returns the configured path to the MathKernel executable
+     * @return path to the executable
+     */
     public String getMathKernelPath() {
         return mathKernelPath;
     }
 
+    /**
+     * Sets the current MathKernel path
+     * @param mathKernelPath
+     */
     public void setMathKernelPath(String mathKernelPath) {
         this.mathKernelPath = mathKernelPath;
     }
@@ -52,7 +68,7 @@ public class MathREPLSettings implements Configurable {
     public void setMathLinkPath(String mathLinkPath) {
         this.mathLinkPath = mathLinkPath;
     }
-
+    // Instance of the configuration panel
     ConfigCenterPanel confInst;
 
     @Nls
@@ -104,11 +120,19 @@ public class MathREPLSettings implements Configurable {
         return confInst.getRootPanel();
     }
 
+    /**
+     * Checks if the content of the configuration form is changed
+     * @return true if the content was modified
+     */
     @Override
     public boolean isModified() {
         return mathKernelPath != confInst.getMathKernelPath() || mathLinkPath != confInst.getMathLinkPath() || nativeLibraryPath != confInst.getNativeLibPath();
     }
 
+    /**
+     * Applies the current configuration of the form
+     * @throws ConfigurationException
+     */
     @Override
     public void apply() throws ConfigurationException {
         // set values to be configured into the storage
@@ -119,6 +143,9 @@ public class MathREPLSettings implements Configurable {
         pc.setValue("repl.simple.mathematica.mathlink_path",confInst.getMathLinkPath());
     }
 
+    /**
+     * resets the content of the configuration form to defaults
+     */
     @Override
     public void reset() {
         // TODO: Initialize path defaults for different arch
@@ -152,6 +179,9 @@ public class MathREPLSettings implements Configurable {
         pc.setValue("repl.simple.mathematica.mathlink_path",getMathLinkPath());
     }
 
+    /**
+     * Nullifies the configuration form contents after the form was  closed
+     */
     @Override
     public void disposeUIResources() {
         confInst = null;

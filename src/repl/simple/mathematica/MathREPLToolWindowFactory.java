@@ -3,27 +3,25 @@ package repl.simple.mathematica;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentManager;
-
-import javax.swing.*;
 
 /**
- * Created by alex on 2/18/14.
+ * Creates the toolbar for placing the mathematica
+ * session tabs. Available by the name 'Mathematica REPL'
  */
 public class MathREPLToolWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(Project project, ToolWindow toolWindow) {
+        // TODO: Create button panel to control the tabs/session
         //Project currentProject = DataKeys.PROJECT.getData(actionEvent.getDataContext());
         //VirtualFile currentFile = DataKeys.VIRTUAL_FILE.getData(actionEvent.getDataContext());
         //Editor editor = DataKeys.EDITOR.getData(actionEvent.getDataContext());
         //TODO: add explicit jar path to wrapper
-        MathSessionWrapper.loadLibrary();
-        MathSessionWrapper msw = MathSessionWrapper.getSingleton();
+        //MathSessionWrapper.loadLibrary();
+        //MathSessionWrapper msw = MathSessionWrapper.create();
 
-        ContentManager cm = toolWindow.getContentManager();
-        Content c = cm.getFactory().createContent((JScrollPane)msw.getRootPanel(),"MathREPL",true);
-        cm.addContent(c);
+        //ContentManager cm = toolWindow.getContentManager();
+        //Content c = cm.getFactory().createContent((JScrollPane)msw.getRootPanel(),"MathREPL",true);
+        //cm.addContent(c);
         /*try {
             //TODO: Start kernel on demand
             String args = "-linkmode launch -linkname \"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink";

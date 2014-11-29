@@ -1,11 +1,15 @@
 package repl.simple.mathematica.Actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.ui.MessageType;
-import repl.simple.mathematica.MathREPLMessages;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.ui.content.Content;
 import repl.simple.mathematica.MathSessionWrapper;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ResourceBundle;
 
 /**
  * Created by alex on 2/2/14.
@@ -18,7 +22,16 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
     }
     public void update(AnActionEvent e)
     {
+        ToolWindowManager twm = null;
+        twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
+        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+
+        Content c = tw.getContentManager().getSelectedContent();
+
+        boolean enabled = null!=c&&Sessions.containsKey(c.getTabName()) ? Sessions.get(c.getTabName()) : false;
+
         e.getPresentation().setEnabled(enabled);
+
     }
 
     public void actionPerformed(AnActionEvent e) {
@@ -29,16 +42,25 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
         // отображаемой в окне инструмента.
         // TODO: find toolbar, get math wrapper and call method connect with the parameters stored
         // TODO: disable action and enable terminate
-        enabled = false;
+
         // TODO: get link status
-        MathSessionWrapper msw = MathSessionWrapper.getSingleton();
+        ToolWindowManager twm = null;
+
+        twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
+
+        //statusBarBalloonMsg(e, MessageType.INFO,twm.getActiveToolWindowId());
+
+        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+        Content c = tw.getContentManager().getSelectedContent();
+        final MathSessionWrapper msw =  MathSessionWrapper.adopt(c.getComponent());
         if(null != msw)
         {
             String args = "-linkmode launch -linkname \"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink";
             try {
+                ResourceBundle rb = ResourceBundle.getBundle("repl.simple.mathematica.resources.MathREPLMessages");
                 msw.call("setLinkArguments",args);
                 msw.call("connect");
-                balloonMessage(e, MessageType.INFO ,MathREPLMessages.kernelStarted);
+                statusBarBalloonMsg(e, MessageType.INFO, rb.getString("kernelStarted"));
             } catch (NoSuchMethodException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException ex) {
@@ -48,5 +70,6 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
             }
 
         }
+        Sessions.put(c.getTabName(),false);
     }
 }

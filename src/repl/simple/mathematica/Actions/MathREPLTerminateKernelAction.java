@@ -1,11 +1,15 @@
 package repl.simple.mathematica.Actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.ui.MessageType;
-import repl.simple.mathematica.MathREPLMessages;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.ui.content.Content;
 import repl.simple.mathematica.MathSessionWrapper;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ResourceBundle;
 
 
 /**
@@ -18,6 +22,14 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
 
     public void update(AnActionEvent e)
     {
+        ToolWindowManager twm = null;
+        twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
+        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+
+        Content c = tw.getContentManager().getSelectedContent();
+
+        boolean enabled = null !=c && Sessions.containsKey(c.getTabName()) ? Sessions.get(c.getTabName()) : true;
+
         e.getPresentation().setEnabled(!enabled);
     }
 
@@ -25,10 +37,17 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
 
         // TODO: find toolbar, get math wrapper and call method connect with the parameters stored
         // TODO: disable action
-        MathSessionWrapper msw = MathSessionWrapper.getSingleton();
+        ToolWindowManager twm = null;
+
+        twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
+        statusBarBalloonMsg(e, MessageType.INFO,twm.getActiveToolWindowId());
+
+        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+        final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());
         try {
             msw.call("closeLink");
-            balloonMessage(e, MessageType.INFO , MathREPLMessages.kernelStopped);
+            ResourceBundle rb = ResourceBundle.getBundle("repl.simple.mathematica.resources.MathREPLMessages");
+            statusBarBalloonMsg(e, MessageType.INFO, rb.getString("kernelStopped"));
             // Change Toolbar appearance (name)
         } catch (NoSuchMethodException e1) {
             e1.printStackTrace();
@@ -37,6 +56,6 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
         } catch (InvocationTargetException e3) {
             e3.printStackTrace();
         }
-        enabled = true;
+        Sessions.put(tw.getContentManager().getSelectedContent().getTabName(),true);
     }
 }

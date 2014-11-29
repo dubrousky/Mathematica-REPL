@@ -1,25 +1,28 @@
 package repl.simple.mathematica.Actions;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;
-import repl.simple.mathematica.MathREPLMessages;
 
 import javax.swing.*;
+import java.util.ResourceBundle;
 
 /**
- * Created by alex on 7/15/14.
+ * This action shows the information form about the plugin
  */
-public class AboutAction extends AnAction {
+public class AboutAction extends MathREPLBaseAction {
+    /**
+     * Class constructor binds
+     */
     public class MyAboutDialog extends DialogWrapper {
         private JPanel myPanel;
         private JLabel myAboutInfo;
         private Project myProject;
         MyAboutDialog(Project project) {
             super(project,true);
-            myAboutInfo.setText(MathREPLMessages.aboutInfo);
+            ResourceBundle rb = ResourceBundle.getBundle("repl.simple.mathematica.resources.MathREPLMessages");
+            myAboutInfo.setText(rb.getString("aboutInfo"));
             myProject = project;
             init();
         }
@@ -31,6 +34,11 @@ public class AboutAction extends AnAction {
         }
 
     };
+
+    /**
+     * Shows the information dialog with plugin info
+     * @param anActionEvent
+     */
     @Override
     public void actionPerformed(final AnActionEvent anActionEvent) {
         new MyAboutDialog(anActionEvent.getProject()).show();
