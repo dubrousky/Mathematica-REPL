@@ -1,5 +1,7 @@
 package repl.simple.mathematica;
 
+import com.intellij.ide.util.PropertiesComponent;
+
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.lang.reflect.InvocationTargetException;
@@ -214,12 +216,15 @@ public class MathSessionWrapper {
      */
     public static void loadLibrary( )
     {
+        PropertiesComponent pc = PropertiesComponent.getInstance();
         if( null == implClass )
         {
-            // FIXME: use configuration to determine paths
-            jarPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
-            nativePath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64/";
 
+            // FIXME: use configuration to determine paths
+            //jarPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
+            jarPath = pc.getValue("repl.simple.mathematica.mathlink_path");
+            //nativePath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64/";
+            nativePath = pc.getValue("repl.simple.mathematica.native_library_path");
             //System.setProperty("java.library.path",nativePath);
             System.setProperty("com.wolfram.jlink",nativePath);
 

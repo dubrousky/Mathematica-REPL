@@ -13,7 +13,7 @@ import javax.swing.*;
  */
 public class MathREPLConfigureAction extends MathREPLBaseAction {
     class MathREPLConfig extends DialogWrapper {
-        Object center;
+        ConfigCenterPanel center;
         public MathREPLConfig() {
             super(false);
             super.init();
@@ -23,6 +23,12 @@ public class MathREPLConfigureAction extends MathREPLBaseAction {
         @Override
         protected JComponent createCenterPanel() {
             center = new ConfigCenterPanel();
+            PropertiesComponent pc = PropertiesComponent.getInstance();
+            center.setMathKernelPath(pc.getValue("repl.simple.mathematica.mathkernel_path"));
+            center.setMathLinkPath(pc.getValue("repl.simple.mathematica.mathlink_path"));
+            center.setNativeLibPath(pc.getValue("repl.simple.mathematica.native_library_path"));
+            center.setMathLinkArgs(pc.getValue("repl.simple.mathematica.mathlink_args"));
+            // TODO: Add configuration
             //return center;
             return ((ConfigCenterPanel)center).getRootPanel();
         }
@@ -41,10 +47,10 @@ public class MathREPLConfigureAction extends MathREPLBaseAction {
             // set values to be configured into the storage
             // use them when connecting to the kernel
             PropertiesComponent pc = PropertiesComponent.getInstance();
-            pc.setValue("mathkernel_path","");
-            pc.setValue("native_library_path","");
-            pc.setValue("mathlink_path","");
-            pc.setValue("connection_type","");
+            pc.setValue("repl.simple.mathematica.mathkernel_path",dialog.center.getMathKernelPath());
+            pc.setValue("repl.simple.mathematica.native_library_path",dialog.center.getNativeLibPath());
+            pc.setValue("repl.simple.mathematica.mathlink_path",dialog.center.getMathLinkPath());
+            pc.setValue("repl.simple.mathematica.mathlink_args",dialog.center.getMathLinkArgs());
         }
     }
 }

@@ -18,7 +18,7 @@ public class ConfigCenterPanel {
     JButton button1;
     JButton button2;
     JButton button3;
-    private JTextField mathLinkArgs;
+    JTextField mathLinkArgs;
 
     public ConfigCenterPanel() {
         button1.addActionListener(new ActionListener() {
@@ -73,5 +73,12 @@ public class ConfigCenterPanel {
     public void setMathLinkPath(String path) { mathLinkPath.setText(path); }
     public void setMathKernelPath(String path) { mathKernelPath.setText(path); }
     public void setNativeLibPath(String path) { nativeLibPath.setText(path); }
+    public String getMathLinkArgs() {
+        return mathLinkArgs.getText();
+    }
+
+    public void setMathLinkArgs(String args) {
+        mathLinkArgs.setText(args);
+    }
 
 }

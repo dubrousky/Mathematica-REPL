@@ -37,6 +37,9 @@ public class MathREPLSettings implements Configurable {
     // Path to the JLink.jar path
     private String mathLinkPath;
 
+    // MathLink arguments
+    private String mathLinkArgs;
+
     /**
      * Returns the configured path to the MathKernel executable
      * @return path to the executable
@@ -68,6 +71,15 @@ public class MathREPLSettings implements Configurable {
     public void setMathLinkPath(String mathLinkPath) {
         this.mathLinkPath = mathLinkPath;
     }
+
+    public String getMathLinkArgs() {
+        return mathLinkArgs;
+    }
+
+    public void setMathLinkArgs(String mathLinkArgs) {
+        this.mathLinkArgs = mathLinkArgs;
+    }
+
     // Instance of the configuration panel
     ConfigCenterPanel confInst;
 
@@ -89,20 +101,28 @@ public class MathREPLSettings implements Configurable {
         confInst = new ConfigCenterPanel();
         // TODO: Initialize path defaults for different arch
         // Again for conciseness we cheat and use undocumented J/Link OS-testing functions:
-        switch(OSUtils.getOperatingSystemType())
+        PropertiesComponent pc = PropertiesComponent.getInstance();
+        // TODO: provide the configuration template
+        mathLinkArgs = "-linkmode launch -linkname \"%s\" -mathlink";
+        OSUtils.OSType t = OSUtils.getOperatingSystemType();
+        switch(t)
         {
             case Windows:
             {
-                mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\4.2\\MathKernel";
+                mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\MathKernel";
                 nativeLibraryPath = "";
                 mathLinkPath = "";
             }
             break;
-            case MacOS:
+            case MacOSx32:
+            case MacOSx64:
             {
                 mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
-                nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
                 mathLinkPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
+                if( OSUtils.OSType.MacOSx32 == t)
+                    nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
+                else
+                    nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64";
             }
             break;
             case Linux:
@@ -113,10 +133,11 @@ public class MathREPLSettings implements Configurable {
                 mathLinkPath = "";
             }
         }
-        PropertiesComponent pc = PropertiesComponent.getInstance();
+
         confInst.setMathKernelPath(pc.getValue("repl.simple.mathematica.mathkernel_path",getMathKernelPath()));
-        confInst.setMathLinkPath(pc.getValue("repl.simple.mathematica.native_library_path",getNativeLibPath()));
-        confInst.setNativeLibPath(pc.getValue("repl.simple.mathematica.mathlink_path",getMathLinkPath()));
+        confInst.setMathLinkPath(pc.getValue("repl.simple.mathematica.mathlink_path",getMathLinkPath()));
+        confInst.setNativeLibPath(pc.getValue("repl.simple.mathematica.native_library_path",getNativeLibPath()));
+        confInst.setMathLinkArgs(pc.getValue("repl.simple.mathematica.mathlink_args",getMathLinkArgs()));
         return confInst.getRootPanel();
     }
 
@@ -141,6 +162,7 @@ public class MathREPLSettings implements Configurable {
         pc.setValue("repl.simple.mathematica.mathkernel_path",confInst.getMathKernelPath());
         pc.setValue("repl.simple.mathematica.native_library_path",confInst.getNativeLibPath());
         pc.setValue("repl.simple.mathematica.mathlink_path",confInst.getMathLinkPath());
+        pc.setValue("repl.simple.mathematica.mathlink_args",confInst.getMathLinkArgs());
     }
 
     /**
@@ -149,21 +171,31 @@ public class MathREPLSettings implements Configurable {
     @Override
     public void reset() {
         // TODO: Initialize path defaults for different arch
-        switch(OSUtils.getOperatingSystemType())
+        PropertiesComponent pc = PropertiesComponent.getInstance();
+        mathLinkArgs = "-linkmode launch -linkname \"%s\" -mathlink";
+
+        OSUtils.OSType t = OSUtils.getOperatingSystemType();
+        switch(t)
         {
             case Windows:
             {
-                mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\4.2\\MathKernel";
+                mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\MathKernel";
                 nativeLibraryPath = "";
                 mathLinkPath = "";
             }
             break;
-            case MacOS:
+            case MacOSx32:
+            case MacOSx64:
             {
                 mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
-                nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
+                // FIXME: need to distinguish between the 32/64 bit os version
                 mathLinkPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
+                if( OSUtils.OSType.MacOSx32 == t)
+                    nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
+                else
+                    nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64";
             }
+
             break;
             case Linux:
             default:
@@ -173,10 +205,11 @@ public class MathREPLSettings implements Configurable {
                 mathLinkPath = "";
             }
         }
-        PropertiesComponent pc = PropertiesComponent.getInstance();
+
         pc.setValue("repl.simple.mathematica.mathkernel_path",getMathKernelPath());
         pc.setValue("repl.simple.mathematica.native_library_path",getNativeLibPath());
         pc.setValue("repl.simple.mathematica.mathlink_path",getMathLinkPath());
+        pc.setValue("repl.simple.mathematica.mathlink_args",getMathLinkArgs());
     }
 
     /**

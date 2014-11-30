@@ -1,5 +1,6 @@
 package repl.simple.mathematica.Actions;
 
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.ui.MessageType;
@@ -55,7 +56,10 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(c.getComponent());
         if(null != msw)
         {
-            String args = "-linkmode launch -linkname \"/Applications/Mathematica.app/Contents/MacOS/MathKernel\" -mathlink";
+            PropertiesComponent pc = PropertiesComponent.getInstance();
+            String args = String.format(pc.getValue("repl.simple.mathematica.mathlink_args"),
+                                        pc.getValue("repl.simple.mathematica.mathkernel_path"));
+            // TODO: use configured values
             try {
                 ResourceBundle rb = ResourceBundle.getBundle("repl.simple.mathematica.resources.MathREPLMessages");
                 msw.call("setLinkArguments",args);
