@@ -7,7 +7,18 @@
   <description><![CDATA[
       This plugin allows to connect IntellyJ Idea(TM) to Mathematica(TM) Kernel<br>
       and have minimal front-end to Mathematica session, control evaluation <br>
-      and kernel.
+      and kernel. You can evaluate your code directly in the REPL without running
+      full Mathematica Front-End.<br>
+      The following functionality is available:
+      <ul>
+      <li>Creating new Mathematica session tabs at the Mathematica REPL toolbar.
+      </li>
+      <li>Starting/Stopping Kernel Link.
+      </li>
+      <li>Evaluate selection in the REPL/Find information on the selected symbol.
+      </li>
+      </ul>
+
       ]]></description>
 
   <change-notes><![CDATA[

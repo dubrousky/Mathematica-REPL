@@ -43,7 +43,7 @@ public class MathSessionWrapper {
      * @return
      */
     public static MathSessionWrapper create(){
-        loadLibrary();
+        loadImplementationClass();
         return new MathSessionWrapper();
     }
 
@@ -212,15 +212,14 @@ public class MathSessionWrapper {
     }
 
     /**
-     *
+     * Loads the com.wolfram.jlink.ui.MathSessionPane class at run time
+     * using URLClassLoader from the system path.
      */
-    public static void loadLibrary( )
+    public static void loadImplementationClass()
     {
         PropertiesComponent pc = PropertiesComponent.getInstance();
         if( null == implClass )
         {
-
-            // FIXME: use configuration to determine paths
             //jarPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
             jarPath = pc.getValue("repl.simple.mathematica.mathlink_path");
             //nativePath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64/";

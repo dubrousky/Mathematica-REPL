@@ -16,7 +16,7 @@ public class MathREPLToolWindowFactory implements ToolWindowFactory {
         //VirtualFile currentFile = DataKeys.VIRTUAL_FILE.getData(actionEvent.getDataContext());
         //Editor editor = DataKeys.EDITOR.getData(actionEvent.getDataContext());
         //TODO: add explicit jar path to wrapper
-        //MathSessionWrapper.loadLibrary();
+        //MathSessionWrapper.loadImplementationClass();
         //MathSessionWrapper msw = MathSessionWrapper.create();
 
         //ContentManager cm = toolWindow.getContentManager();
