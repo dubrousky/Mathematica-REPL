@@ -162,6 +162,8 @@ public class MathREPLSettings implements Configurable {
     public void apply() throws ConfigurationException {
         // set values to be configured into the storage
         // use them when connecting to the kernel
+        // TODO: validate the input and throw the exception in the case the config is invalid
+        // TODO: verify whether the paths exist in the system
         PropertiesComponent pc = PropertiesComponent.getInstance();
         pc.setValue("repl.simple.mathematica.mathkernel_path",confInst.getMathKernelPath());
         pc.setValue("repl.simple.mathematica.native_library_path",confInst.getNativeLibPath());
@@ -183,6 +185,7 @@ public class MathREPLSettings implements Configurable {
         {
             case Windows:
             {
+                // TODO:
                 mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\MathKernel";
                 nativeLibraryPath = "";
                 mathLinkPath = "";

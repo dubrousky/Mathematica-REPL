@@ -28,8 +28,8 @@ public class MathREPLHelpSelectedSymbol extends MathREPLKernelAction {
     {
         ToolWindowManager twm = null;
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
-        // FIXME: move tool window name to the base class
-        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+
+        ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
 
         Content c = tw.getContentManager().getSelectedContent();
 
@@ -59,7 +59,7 @@ public class MathREPLHelpSelectedSymbol extends MathREPLKernelAction {
         //msp.setInput()
         ToolWindow tw = null;
 
-        tw = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindow("Mathematica REPL");
+        tw = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindow(TOOL_WINDOW);
 
         //for(String s : ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindowIds())
         //{

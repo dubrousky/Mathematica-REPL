@@ -29,7 +29,7 @@ public class MathREPLEvaluateSelectionAction extends MathREPLKernelAction {
     {
         ToolWindowManager twm = null;
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
-        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+        ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
 
         Content c = tw.getContentManager().getSelectedContent();
 
@@ -59,7 +59,7 @@ public class MathREPLEvaluateSelectionAction extends MathREPLKernelAction {
         //msp.setInput()
         ToolWindow tw = null;
 
-        tw = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindow("Mathematica REPL");
+        tw = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindow(TOOL_WINDOW);
 
         //for(String s : ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindowIds())
         //{

@@ -19,6 +19,7 @@ import java.awt.*;
  * Created by alex on 2/2/14.
  */
 public abstract class MathREPLBaseAction extends AnAction {
+    public static final String TOOL_WINDOW = "Mathematica REPL";
     public MathREPLBaseAction() {
         super();
         getTemplatePresentation().setIcon(IconLoader.findIcon("/repl/simple/mathematica/resources/icon-run.png"));

@@ -21,7 +21,7 @@ public class MathREPLNewSession extends MathREPLKernelAction {
     static int sessionId = 0;
     @Override
     // TODO: Disable action if there are more than configured sessions running
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(final AnActionEvent e) {
         //Project currentProject = DataKeys.PROJECT.getData(actionEvent.getDataContext());
         //VirtualFile currentFile = DataKeys.VIRTUAL_FILE.getData(actionEvent.getDataContext());
         //Editor editor = DataKeys.EDITOR.getData(actionEvent.getDataContext());
@@ -33,7 +33,7 @@ public class MathREPLNewSession extends MathREPLKernelAction {
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
         //statusBarBalloonMsg(e, MessageType.INFO,twm.getActiveToolWindowId());
 
-        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+        ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
         //tw.getContentManager().getSelectedContent().putUserData(new Key<Boolean>("enabled"),true);
         final MathSessionWrapper msw = MathSessionWrapper.create();
         if( null != msw && msw.hasImplementation() )
@@ -51,6 +51,10 @@ public class MathREPLNewSession extends MathREPLKernelAction {
                 public void dispose() {
                     try {
                         msw.call("closeLink");
+                        new Notification("",
+                                "JLink",
+                                "The connection to the Kernel was disposed.",
+                                NotificationType.INFORMATION).notify( e.getProject() );
                     } catch (NoSuchMethodException e1) {
                         e1.printStackTrace();
                     } catch (IllegalAccessException e1) {

@@ -1,6 +1,8 @@
 package repl.simple.mathematica.Actions;
 
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.ui.MessageType;
@@ -51,7 +53,7 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
 
         //statusBarBalloonMsg(e, MessageType.INFO,twm.getActiveToolWindowId());
 
-        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+        ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
         Content c = tw.getContentManager().getSelectedContent();
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(c.getComponent());
         if(null != msw)
@@ -64,6 +66,10 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
                 ResourceBundle rb = ResourceBundle.getBundle("repl.simple.mathematica.resources.MathREPLMessages");
                 msw.call("setLinkArguments",args);
                 msw.call("connect");
+                new Notification("",
+                        "JLink",
+                        "The connection to the Kernel was established.",
+                        NotificationType.INFORMATION).notify( e.getProject() );
                 statusBarBalloonMsg(e, MessageType.INFO, rb.getString("kernelStarted"));
             } catch (NoSuchMethodException ex) {
                 ex.printStackTrace();

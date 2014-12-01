@@ -1,5 +1,7 @@
 package repl.simple.mathematica.Actions;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.ui.MessageType;
@@ -46,6 +48,11 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());
         try {
             msw.call("closeLink");
+            new Notification("",
+                    "JLink",
+                    "The connection to the Kernel was stopped.\n"+
+                            "To evaluate expression you need to start Kernel again.",
+                    NotificationType.INFORMATION).notify( e.getProject() );
             ResourceBundle rb = ResourceBundle.getBundle("repl.simple.mathematica.resources.MathREPLMessages");
             statusBarBalloonMsg(e, MessageType.INFO, rb.getString("kernelStopped"));
             // Change Toolbar appearance (name)
