@@ -9,6 +9,7 @@ import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.WindowManager;
+import com.intellij.ui.content.Content;
 import repl.simple.mathematica.MathSessionWrapper;
 
 import javax.swing.*;
@@ -16,13 +17,27 @@ import javax.swing.text.BadLocationException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by alex on 2/2/14.
+ * Evaluates the selected text in the current mathematica session tab.
+ * Should be enabled only if the session was started.
  */
-public class MathREPLEvaluateSelectionAction extends MathREPLBaseAction {
+public class MathREPLEvaluateSelectionAction extends MathREPLKernelAction {
     public MathREPLEvaluateSelectionAction() {
         super();
     }
 
+    public void update(AnActionEvent e)
+    {
+        ToolWindowManager twm = null;
+        twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
+        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+
+        Content c = tw.getContentManager().getSelectedContent();
+
+        boolean enabled = null!=c&&Sessions.containsKey(c.getTabName()) ? Sessions.get(c.getTabName()) : true;
+
+        e.getPresentation().setEnabled(!enabled);
+
+    }
     public void actionPerformed(AnActionEvent e) {
         StatusBar statusBar = WindowManager.getInstance().getStatusBar(DataKeys.PROJECT.getData(e.getDataContext()));
 

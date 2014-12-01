@@ -14,7 +14,7 @@ public final class OSUtils {
      * types of Operating Systems
      */
     public enum OSType {
-        Windows, MacOSx32, MacOSx64, Linux, Other
+        Windows, MacOSx32, MacOSx64, Linux, Linux64, Other
     };
 
     protected static OSType detectedOS;
@@ -29,7 +29,7 @@ public final class OSUtils {
         if (detectedOS == null) {
             String OS = System.getProperty("os.name", "generic").toLowerCase();
             if ((OS.indexOf("mac") >= 0) || (OS.indexOf("darwin") >= 0)) {
-                String ARCH = System.getProperty("os.arch","i386").toLowerCase();
+                String ARCH = System.getProperty("os.arch","generic").toLowerCase();
                 detectedOS = OSType.MacOSx32;
                 if(ARCH.indexOf("64") >=0 )
                 {
@@ -38,7 +38,11 @@ public final class OSUtils {
             } else if (OS.indexOf("win") >= 0) {
                 detectedOS = OSType.Windows;
             } else if (OS.indexOf("nux") >= 0) {
+                String ARCH = System.getProperty("os.arch","generic").toLowerCase();
                 detectedOS = OSType.Linux;
+                if(ARCH.indexOf("64") >=0 ) {
+                    detectedOS = OSType.Linux64;
+                }
             } else {
                 detectedOS = OSType.Other;
             }

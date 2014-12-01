@@ -9,7 +9,8 @@ import repl.simple.mathematica.Ui.ConfigCenterPanel;
 import javax.swing.*;
 
 /**
- * Created by alex on 2/2/14.
+ * TODO: Configure action should be performed for disabled tab
+ * TODO: Think about storing per tab session parameters (paths, args)
  */
 public class MathREPLConfigureAction extends MathREPLBaseAction {
     class MathREPLConfig extends DialogWrapper {

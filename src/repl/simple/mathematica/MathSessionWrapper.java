@@ -1,6 +1,8 @@
 package repl.simple.mathematica;
 
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -218,18 +220,17 @@ public class MathSessionWrapper {
     public static void loadImplementationClass()
     {
         PropertiesComponent pc = PropertiesComponent.getInstance();
-        if( null == implClass )
-        {
+        if( null == implClass ) {
             //jarPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
             jarPath = pc.getValue("repl.simple.mathematica.mathlink_path");
             //nativePath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64/";
             nativePath = pc.getValue("repl.simple.mathematica.native_library_path");
             //System.setProperty("java.library.path",nativePath);
-            System.setProperty("com.wolfram.jlink",nativePath);
+            System.setProperty("com.wolfram.jlink", nativePath);
 
             URL myJarFile = null;
             try {
-                myJarFile = new URL("file:////"+jarPath);
+                myJarFile = new URL("file:////" + jarPath);
             } catch (MalformedURLException e) {
                 System.out.println(e.getMessage());
                 // possibly show message dialog
@@ -245,5 +246,9 @@ public class MathSessionWrapper {
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean hasImplementation() {
+        return null != implClass;
     }
 }

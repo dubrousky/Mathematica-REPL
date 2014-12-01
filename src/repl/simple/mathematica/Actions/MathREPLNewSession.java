@@ -1,5 +1,7 @@
 package repl.simple.mathematica.Actions;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
@@ -18,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 public class MathREPLNewSession extends MathREPLKernelAction {
     static int sessionId = 0;
     @Override
+    // TODO: Disable action if there are more than configured sessions running
     public void actionPerformed(AnActionEvent e) {
         //Project currentProject = DataKeys.PROJECT.getData(actionEvent.getDataContext());
         //VirtualFile currentFile = DataKeys.VIRTUAL_FILE.getData(actionEvent.getDataContext());
@@ -33,31 +36,43 @@ public class MathREPLNewSession extends MathREPLKernelAction {
         ToolWindow tw = twm.getToolWindow("Mathematica REPL");
         //tw.getContentManager().getSelectedContent().putUserData(new Key<Boolean>("enabled"),true);
         final MathSessionWrapper msw = MathSessionWrapper.create();
-
-        ContentManager cm = tw.getContentManager();
-        // TODO: allow limited number of sessions only (due to the license limitations)
-        // TODO: make it configurable
-        // TODO: make disposable session close the connection to mathematica.
-        Content c = cm.getFactory().createContent((JScrollPane)msw.getRootPanel(),"MathREPL("+sessionId+")",true);
-        c.setCloseable(true);
-        c.setShouldDisposeContent(true);
-        // Close link on tab close
-        c.setDisposer(new Disposable() {
-            @Override
-            public void dispose() {
-                try {
-                    msw.call("closeLink");
-                } catch (NoSuchMethodException e1) {
-                    e1.printStackTrace();
-                } catch (IllegalAccessException e1) {
-                    e1.printStackTrace();
-                } catch (InvocationTargetException e1) {
-                    e1.printStackTrace();
+        if( null != msw && msw.hasImplementation() )
+        {
+            ContentManager cm = tw.getContentManager();
+            // TODO: allow limited number of sessions only (due to the license limitations)
+            // TODO: make it configurable
+            // TODO: make disposable session close the connection to mathematica.
+            Content c = cm.getFactory().createContent((JScrollPane) msw.getRootPanel(), "MathREPL(" + sessionId + ")", true);
+            c.setCloseable(true);
+            c.setShouldDisposeContent(true);
+            // Close link on tab close
+            c.setDisposer(new Disposable() {
+                @Override
+                public void dispose() {
+                    try {
+                        msw.call("closeLink");
+                    } catch (NoSuchMethodException e1) {
+                        e1.printStackTrace();
+                    } catch (IllegalAccessException e1) {
+                        e1.printStackTrace();
+                    } catch (InvocationTargetException e1) {
+                        e1.printStackTrace();
+                    }
                 }
-            }
-        });
-        cm.addContent(c);
-        sessionId+=1;
-        Sessions.put(c.getTabName(),true);
+            });
+            cm.addContent(c);
+            sessionId += 1;
+            Sessions.put(c.getTabName(), true);
+        }
+        // if implementation class was not loaded notify the
+        else
+        {
+            new Notification("",
+                             "JLink loading error",
+                             "The plugin was unable to load the class\n"+
+                                     "required for starting Mathematica sessions.\n"+
+                                     "Please, configure the plugin paths.",
+                             NotificationType.ERROR).notify(e.getProject());
+        }
     }
 }
