@@ -17,15 +17,22 @@
     <build>
         <resources>
             <resource>
-            <directory>src/repl/mathematica/simple/resources</directory>
+            <directory>${project.basedir}</directory>
             <includes>
-                <include>META-INF/plugin.xml</include>
+                <include>META-INF/*</include>
+                <include>repl/simple/mathematica/resources/*</include>
             </includes>
             <filtering>true</filtering>
             </resource>
+            <resource>
+                <directory>${project.basedir}/src</directory>
+                <includes>
+                    <include>repl/simple/mathematica/resources/*</include>
+                </includes>
+            </resource>
         </resources>
-        <finalName>mathematica-repl</finalName>
-        <sourceDirectory>src</sourceDirectory>
+        <finalName>Mathematica REPL</finalName>
+        <sourceDirectory>src/</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -47,9 +54,72 @@
                             <goal>wget</goal>
                         </goals>
                         <configuration>
+                            <unpack>true</unpack>
                             <url>http://download.jetbrains.com/idea/ideaIC-13.1.6.tar.gz</url>
                             <outputDirectory>${project.build.directory}/dependency/IntelliJ-IDEA-CE</outputDirectory>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>compile-forms</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <path id="maven.plugin.complete.classpath">
+                                    <path refid="maven.plugin.classpath" />
+                                    <fileset dir="${project.build.directory}/dependency/IntelliJ-IDEA-CE/idea-IC-135.1306/lib">
+                                        <include name="**/*.jar"/>
+                                    </fileset>
+                                </path>
+                                <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="maven.plugin.complete.classpath" />
+                                <path id="sourcepath">
+                                    <dirset dir="${project.basedir}">
+                                        <include name="src"/>
+                                    </dirset>
+                                </path>
+                                <instrumentIdeaExtensions destdir="${project.build.outputDirectory}" extdirs="${project.build.directory}/dependency/IntelliJ-IDEA-CE/idea-IC-135.1306/lib">
+                                    <classpath refid="maven.compile.classpath" />
+                                    <src refid="sourcepath" />
+                                </instrumentIdeaExtensions>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.sun</groupId>
+                        <artifactId>tools</artifactId>
+                        <version>1.6.0</version>
+                        <scope>system</scope>
+                        <systemPath>${env.JAVA_HOME}/lib/tools.jar</systemPath>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/lib/</outputDirectory>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteSnapshots>false</overWriteSnapshots>
+                    <overWriteIfNewer>true</overWriteIfNewer>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -63,14 +133,6 @@
                     </compilerArguments>
                     <source>1.6</source>
                     <target>1.6</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <outputDirectory>${basedir}</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
