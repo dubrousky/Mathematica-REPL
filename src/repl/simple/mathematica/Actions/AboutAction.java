@@ -21,7 +21,7 @@ public class AboutAction extends MathREPLBaseAction {
      */
     public class MyAboutDialog extends DialogWrapper {
         private JPanel myPanel;
-        private JLabel myAboutInfo;
+        private JTextArea myAboutInfo;
         private Project myProject;
 
         MyAboutDialog(Project project) {
@@ -54,10 +54,14 @@ public class AboutAction extends MathREPLBaseAction {
          */
         private void $$$setupUI$$$() {
             myPanel = new JPanel();
-            myPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
-            myAboutInfo = new JLabel();
+            myPanel.setLayout(new GridLayoutManager(2, 2, new Insets(5, 5, 5, 5), -1, -1));
+            myAboutInfo = new JTextArea();
+            myAboutInfo.setColumns(80);
+            myAboutInfo.setEditable(false);
+            myAboutInfo.setLineWrap(true);
             myAboutInfo.setText("Label");
-            myPanel.add(myAboutInfo, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            myAboutInfo.setWrapStyleWord(true);
+            myPanel.add(myAboutInfo, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(500, 100), null, 0, false));
             final Spacer spacer1 = new Spacer();
             myPanel.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         }
