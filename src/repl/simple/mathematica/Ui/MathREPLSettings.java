@@ -3,9 +3,9 @@ package repl.simple.mathematica.Ui;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.util.SystemInfo;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
-import repl.simple.mathematica.OSUtils;
 
 import javax.swing.*;
 
@@ -104,38 +104,25 @@ public class MathREPLSettings implements Configurable {
         PropertiesComponent pc = PropertiesComponent.getInstance();
 
         mathLinkArgs = "-linkmode launch -linkname \"%s\" -mathlink";
-        OSUtils.OSType t = OSUtils.getOperatingSystemType();
-        switch(t)
-        {
-            case Windows:
-            {
-                mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\MathKernel";
-                nativeLibraryPath = "";
-                mathLinkPath = "";
-            }
-            break;
-            case MacOSx32:
-            case MacOSx64:
-            {
-                mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
-                mathLinkPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
-                if( OSUtils.OSType.MacOSx32 == t)
-                    nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
-                else
-                    nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64";
-            }
-            break;
-            case Linux:
-            case Linux64:
-            default:
-            {
-                mathKernelPath = "/usr/local/bin/math";
-                mathLinkPath = "/usr/local/Wolfram/Mathematica/%s/SystemFiles/Links/JLink/JLink.jar";
-                if( OSUtils.OSType.Linux == t)
-                    nativeLibraryPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/SystemFiles/Libraries/Linux";
-                else
-                    nativeLibraryPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/SystemFiles/Libraries/Linux-x86-64";
-            }
+
+        if(SystemInfo.isWindows) {
+            mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\MathKernel";
+            nativeLibraryPath = "";
+            mathLinkPath = "";
+        } else if(SystemInfo.isMac) {
+            mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
+            mathLinkPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
+            if( SystemInfo.is32Bit )
+                nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
+            else
+                nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64";
+        } else if(SystemInfo.isLinux) {
+            mathKernelPath = "/usr/local/bin/math";
+            mathLinkPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/JLink.jar";
+            if( SystemInfo.is32Bit )
+                nativeLibraryPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/SystemFiles/Libraries/Linux";
+            else
+                nativeLibraryPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/SystemFiles/Libraries/Linux-x86-64";
         }
 
         confInst.setMathKernelPath(pc.getValue("repl.simple.mathematica.mathkernel_path",getMathKernelPath()));
@@ -180,43 +167,25 @@ public class MathREPLSettings implements Configurable {
         PropertiesComponent pc = PropertiesComponent.getInstance();
         mathLinkArgs = "-linkmode launch -linkname \"%s\" -mathlink";
 
-        OSUtils.OSType t = OSUtils.getOperatingSystemType();
-        switch(t)
-        {
-            case Windows:
-            {
-                // TODO:
-                mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\MathKernel";
-                nativeLibraryPath = "";
-                mathLinkPath = "";
-            }
-            break;
-            case MacOSx32:
-            case MacOSx64:
-            {
-                mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
-
-                mathLinkPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
-                if( OSUtils.OSType.MacOSx32 == t)
-                    nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
-                else
-                    nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64";
-            }
-
-            break;
-            case Linux:
-            case Linux64:
-            default:
-            {
-                mathKernelPath = "/usr/local/bin/math";
-                mathLinkPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/JLink.jar";
-                if( OSUtils.OSType.Linux == t)
-                    nativeLibraryPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/SystemFiles/Libraries/Linux";
-                else
-                    nativeLibraryPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/SystemFiles/Libraries/Linux-x86-64";
-            }
+        if(SystemInfo.isWindows) {
+            mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\MathKernel";
+            nativeLibraryPath = "";
+            mathLinkPath = "";
+        } else if(SystemInfo.isMac) {
+            mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
+            mathLinkPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
+            if( SystemInfo.is32Bit )
+                nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
+            else
+                nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64";
+        } else if(SystemInfo.isLinux) {
+            mathKernelPath = "/usr/local/bin/math";
+            mathLinkPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/JLink.jar";
+            if( SystemInfo.is32Bit )
+                nativeLibraryPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/SystemFiles/Libraries/Linux";
+            else
+                nativeLibraryPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/SystemFiles/Libraries/Linux-x86-64";
         }
-
         pc.setValue("repl.simple.mathematica.mathkernel_path",getMathKernelPath());
         pc.setValue("repl.simple.mathematica.native_library_path",getNativeLibPath());
         pc.setValue("repl.simple.mathematica.mathlink_path",getMathLinkPath());
