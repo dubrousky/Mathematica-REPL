@@ -18,10 +18,11 @@
 
   * JRE to run the IDE (there are some issues with running the plugin under Mac OS X x64)
 
-* Build
+* Build [![Build Status](https://travis-ci.org/dubrousky/Mathematica-REPL.svg?branch=master)](https://travis-ci.org/dubrousky/Mathematica-REPL)
 
   * To build the plugin manually you need an IntellyJIdea SDK installed. The procedure is simple. You need to go Build->Prepare All Plugin Modules for Deployment. The IDE will do the rest. 
   * You can also download the archive from the repository. However it is osolete.
+  * Travis CI builds plugin jar file. See the build status above.
 
 * Getting started
   * Before the first usage of plugin you need to make sure that the requiremens are met - your system has a JRE and Mathematica installed
