@@ -3,16 +3,15 @@ jdk: openjdk6
 script: mvn clean package
 after_success:
 - cd /tmp
-- git clone https://${GH_TOKEN}@github.com/${GH_USER_NAME}/${GH_PROJECT_NAME} mathematica-repl
+- git clone https://${GH_TOKEN}@github.com/${GIT_NAME}/${GH_PROJECT_NAME} mathematica-repl
 - cd mathematica-repl
 - cp $CI_HOME/target/Mathematica\ REPL.jar .
 - git config --global user.name $GIT_AUTHOR_NAME
 - git config --global user.email $GIT_AUTHOR_EMAIL
 - git commit -m "[ci skip] Committed by Travis-CI"
-- git push https://${GH_TOKEN}@github.com/${GH_USER_NAME}/${GH_PROJECT_NAME} 2>&1
+- git push https://${GH_TOKEN}@github.com/${GIT_NAME}/${GH_PROJECT_NAME} 2>&1
 env:
   global:
-  - GH_USER_NAME: dubrousky
   - GH_PROJECT_NAME: Mathematica-REPL
   - GIT_AUTHOR_NAME: TravisCI
   - GIT_AUTHOR_EMAIL: noreply@travis-ci.org
