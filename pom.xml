@@ -43,29 +43,39 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.googlecode.maven-download-plugin</groupId>
-                <artifactId>download-maven-plugin</artifactId>
-                <version>1.2.0</version>
-                <executions>
-                    <execution>
-                        <id>download-intellij-ce</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <unpack>true</unpack>
-                            <url>http://download.jetbrains.com/idea/ideaIC-13.1.6.tar.gz</url>
-                            <outputDirectory>${project.build.directory}/dependency/IntelliJ-IDEA-CE</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
                 <executions>
+                    <execution>
+                        <id>download-files</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- download file -->
+                                <get src="http://download.jetbrains.com/idea/ideaIC-13.1.6.tar.gz"
+                                     dest="${project.build.directory}"
+                                     verbose="false"
+                                     usetimestamp="true"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>prepare</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <tasks>
+                                <echo message="prepare phase" />
+                                <untar compression="gzip" src="${project.build.directory}/ideaIC-13.1.6.tar.gz" dest="${project.build.directory}" />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <id>compile-forms</id>
                         <phase>process-classes</phase>
@@ -76,7 +86,7 @@
                             <target>
                                 <path id="maven.plugin.complete.classpath">
                                     <path refid="maven.plugin.classpath" />
-                                    <fileset dir="${project.build.directory}/dependency/IntelliJ-IDEA-CE/idea-IC-135.1306/lib">
+                                    <fileset dir="${project.build.directory}/idea-IC-135.1306/lib">
                                         <include name="**/*.jar"/>
                                     </fileset>
                                 </path>
@@ -86,7 +96,7 @@
                                         <include name="src"/>
                                     </dirset>
                                 </path>
-                                <instrumentIdeaExtensions destdir="${project.build.outputDirectory}" extdirs="${project.build.directory}/dependency/IntelliJ-IDEA-CE/idea-IC-135.1306/lib">
+                                <instrumentIdeaExtensions destdir="${project.build.outputDirectory}" extdirs="${project.build.directory}/idea-IC-135.1306/lib">
                                     <classpath refid="maven.compile.classpath" />
                                     <src refid="sourcepath" />
                                 </instrumentIdeaExtensions>
@@ -129,7 +139,7 @@
                 <version>2.5.1</version>
                 <configuration>
                     <compilerArguments>
-                        <extdirs>${project.build.directory}/dependency/IntelliJ-IDEA-CE/idea-IC-135.1306/lib/</extdirs>
+                        <extdirs>${project.build.directory}/idea-IC-135.1306/lib/</extdirs>
                     </compilerArguments>
                     <source>1.6</source>
                     <target>1.6</target>
