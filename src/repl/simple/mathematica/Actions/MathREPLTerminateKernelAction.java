@@ -13,7 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 
 
 /**
- * Created by alex on 2/2/14.
+ * Terminates the Kernel session
  */
 public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
     public MathREPLTerminateKernelAction() {
@@ -24,7 +24,7 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
     {
         ToolWindowManager twm = null;
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
-        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+        ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
 
         Content c = tw.getContentManager().getSelectedContent();
 
