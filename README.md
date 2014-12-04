@@ -43,6 +43,21 @@ Having performed the steps mentioned above you can start using the Mathematica R
 * The repl has very basic functionality and does not support the advanced Mathematica features like Manipulate or plot editing.
 * The plugin provides limited syntax higlight support based on the JLink functionality. To get the full syntax higlighting support please pay attention to the Mathematica Language support at IntellyJ Idea repository.
 
+The following hotkeys are available at the REPL tab:
+```
+  Ctrl-X    Cut
+  Ctrl-C    Copy
+  Ctrl-V    Paste 
+  Ctrl-Z    Undo 
+  Ctrl-Y    Redo 
+  Ctrl-L    Copy Input From Above 
+  Ctrl-B    Balance Brackets 
+  Alt-.     Abort Computation 
+  Alt-,     Interrupt Computation (brings up dialog)
+            (These all use the Command key on the Macintosh)
+```
+
+
 ### TODO ###
 * Support of the remote kernel connection using math link
 * Unit testing
