@@ -2,13 +2,18 @@
   <id>repl.simple.mathematica.id</id>
   <name>Mathematica REPL</name>
   <version>0.0.1</version>
-  <vendor email="dubrousky@gmail.com" url="https://github.com/dubrousky/Mathematica-REPL/wiki">dubrousky</vendor>
-
+  <vendor email="dubrousky@gmail.com"
+          url="https://github.com/dubrousky/Mathematica-REPL"
+          logo="repl/simple/mathematica/resources/icon-run.png">
+      Aliaksandr Dubrouski
+  </vendor>
   <description><![CDATA[
       This plugin allows to connect IntellyJ Idea(TM) to Mathematica(TM) Kernel<br>
       and have minimal front-end to Mathematica session, control evaluation <br>
       and kernel. You can evaluate your code directly in the REPL without running
       full Mathematica Front-End.<br>
+      To use this plugin you need a full installation of Mathematica for given platform.
+      The plugin will depends on the JLink Mathematica component and some native libraries. <br>
       The following functionality is available:
       <ul>
       <li>Creating new Mathematica session tabs at the Mathematica REPL toolbar.
@@ -18,20 +23,25 @@
       <li>Evaluate selection in the REPL/Find information on the selected symbol.
       </li>
       </ul>
+      Please note that front end support is basic so the advanced features like
+      Manipulate or dialogs are not supported.<br>
 
-      ]]></description>
+      The plugin does not provide syntax highlight support for Mathematica language.
+       There is another great plugin for that Mathematica Support. Please refer to
+       the <a href="https://github.com/halirutan/Mathematica-IntelliJ-Plugin">Mathematica-IntelliJ-Plugin</a>.
+      ]]>
+  </description>
 
   <change-notes><![CDATA[
       Change notes.<br>
-      <small>
       <ul>
         <li>Added resource files using the resource bundles.</li>
         <li>Refactored action system.</li>
         <li>Added some actions to the context menu.</li>
         <li>Added About action</li>
         <li>Added error reporting dialog</li>
-      </ul>
-      </small>
+      </ul><br>
+      Full list of changes and bugfixes is available at <a href="https://github.com/dubrousky/Mathematica-REPL/wiki">Git</a>
       ]]>
   </change-notes>
 
@@ -41,7 +51,6 @@
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
   <depends>com.intellij.modules.lang</depends>
-
   <application-components>
     <!-- Add your application components here -->
   </application-components>
