@@ -37,15 +37,12 @@ public class MathREPLNewSession extends MathREPLKernelAction {
             c.setCloseable(true);
             c.setShouldDisposeContent(true);
             // Close link on tab close
+
             c.setDisposer(new Disposable() {
                 @Override
                 public void dispose() {
                     try {
                         msw.call("closeLink");
-                        new Notification("",
-                                "JLink",
-                                "The connection to the Kernel was disposed.",
-                                NotificationType.INFORMATION).notify( e.getProject() );
                     } catch (NoSuchMethodException e1) {
                         e1.printStackTrace();
                     } catch (IllegalAccessException e1) {

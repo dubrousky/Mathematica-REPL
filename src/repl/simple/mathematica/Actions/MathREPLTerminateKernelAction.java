@@ -40,7 +40,7 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
 
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
 
-        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+        ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());
         try {
             msw.call("closeLink");
@@ -49,6 +49,7 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
                     "The connection to the Kernel was stopped.\n"+
                             "To evaluate expression you need to start Kernel again.",
                     NotificationType.INFORMATION).notify( e.getProject() );
+
             // Change Toolbar appearance (name)
         } catch (NoSuchMethodException e1) {
             e1.printStackTrace();
