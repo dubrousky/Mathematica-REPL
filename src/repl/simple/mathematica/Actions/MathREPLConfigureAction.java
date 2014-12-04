@@ -19,6 +19,7 @@ public class MathREPLConfigureAction extends MathREPLBaseAction {
             super(false);
             super.init();
             setTitle("Mathematica Paths");
+            this.pack();
         }
         @Nullable
         @Override
