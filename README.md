@@ -63,4 +63,4 @@ The following hotkeys are available at the REPL tab:
 * Unit testing
  
 ### Disclaimer ###
-The Mathematica and IntellyJ IDEA are the trademarks of their respective owners.
+The Mathematica and IntellyJ IDEA are the trademarks of their respective owners. The pluginsource code is licensed under the GNU GPLv3 licence http://www.gnu.org/licenses/gpl-3.0.en.html except the artwork that will be further replaced.
