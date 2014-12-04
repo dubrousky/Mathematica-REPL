@@ -8,7 +8,7 @@ after_success:
 - cp $CI_HOME/target/Mathematica\ REPL.jar .
 - git config --global user.name $GIT_AUTHOR_NAME
 - git config --global user.email $GIT_AUTHOR_EMAIL
-- git commit -m "[ci skip] Committed by Travis-CI"
+- git commit -m "[ci skip] Committed by Travis-CI" Mathematica\ REPL.jar
 - git push https://${GH_TOKEN}@github.com/${GIT_NAME}/${GH_PROJECT_NAME} 2>&1
 env:
   global:
