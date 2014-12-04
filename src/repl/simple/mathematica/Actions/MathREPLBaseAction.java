@@ -16,7 +16,7 @@ import com.intellij.ui.awt.RelativePoint;
 import java.awt.*;
 
 /**
- * Created by alex on 2/2/14.
+ * Base plugin action
  */
 public abstract class MathREPLBaseAction extends AnAction {
     public static final String TOOL_WINDOW = "Mathematica REPL";

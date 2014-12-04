@@ -1,5 +1,6 @@
 <idea-plugin version="2">
   <id>repl.simple.mathematica.id</id>
+    <category>Custom Languages</category>
   <name>Mathematica REPL</name>
   <version>0.0.1</version>
   <vendor email="dubrousky@gmail.com"
@@ -117,13 +118,11 @@
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
-     <errorHandler implementation="repl.simple.mathematica.ErrorReporter"/>
      <applicationConfigurable instance="repl.simple.mathematica.Ui.MathREPLSettings"></applicationConfigurable>
      <toolWindow id="Mathematica REPL"
                  canCloseContents="true"
                  icon="/repl/simple/mathematica/resources/icon-run.png"
                  anchor="right"
                  factoryClass="repl.simple.mathematica.MathREPLToolWindowFactory" />
-     <fileTypeFactory implementation="repl.simple.mathematica.MathFileTypeFactory"/>
   </extensions>
 </idea-plugin>

@@ -30,8 +30,7 @@ public class MathREPLConfigureAction extends MathREPLBaseAction {
             center.setMathLinkPath(pc.getValue("repl.simple.mathematica.mathlink_path"));
             center.setNativeLibPath(pc.getValue("repl.simple.mathematica.native_library_path"));
             center.setMathLinkArgs(pc.getValue("repl.simple.mathematica.mathlink_args"));
-            // TODO: Add configuration
-            //return center;
+
             return ((ConfigCenterPanel)center).getRootPanel();
         }
     }
@@ -39,7 +38,6 @@ public class MathREPLConfigureAction extends MathREPLBaseAction {
         super();
     }
     public void actionPerformed(AnActionEvent e) {
-        // TODO: insert action logic here
         // get values previously stored and display them as defaults on dialog
         MathREPLConfig dialog = new MathREPLConfig ();
         dialog.setModal(true);

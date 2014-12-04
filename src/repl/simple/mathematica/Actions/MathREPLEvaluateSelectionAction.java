@@ -5,10 +5,8 @@ import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.content.Content;
 import repl.simple.mathematica.MathSessionWrapper;
 
@@ -39,11 +37,7 @@ public class MathREPLEvaluateSelectionAction extends MathREPLKernelAction {
 
     }
     public void actionPerformed(AnActionEvent e) {
-        StatusBar statusBar = WindowManager.getInstance().getStatusBar(DataKeys.PROJECT.getData(e.getDataContext()));
 
-        // One of the ERROR/INFO/WARNING
-        com.intellij.openapi.ui.MessageType messageType = com.intellij.openapi.ui.MessageType.INFO;
-        // Get selected text
         final Editor editor = e.getData(DataKeys.EDITOR);
         if (editor == null) {
             return;
@@ -54,17 +48,10 @@ public class MathREPLEvaluateSelectionAction extends MathREPLKernelAction {
             return;
         }
         final String text = selectedText.trim();
-        //TODO: find Mathematica panel and paste&&run it, now just show in popup
 
-        //msp.setInput()
         ToolWindow tw = null;
 
         tw = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindow(TOOL_WINDOW);
-
-        //for(String s : ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindowIds())
-        //{
-        //    System.err.println(s);
-        //}
 
 
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());

@@ -12,7 +12,7 @@ import java.awt.*;
 
 
 /**
- * Created by alex on 2/15/14.
+ * Plugin path configuration component.
  */
 public class ConfigCenterPanel {
     JPanel rootPanel;

@@ -15,7 +15,7 @@ import javax.swing.text.BadLocationException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by alex on 2/2/14.
+ * Requests help for selected symbol under cursor.
  */
 public class MathREPLHelpSelectedSymbol extends MathREPLKernelAction {
 
@@ -40,8 +40,6 @@ public class MathREPLHelpSelectedSymbol extends MathREPLKernelAction {
     }
 
     public void actionPerformed(AnActionEvent e) {
-        // One of the ERROR/INFO/WARNING
-        com.intellij.openapi.ui.MessageType messageType = com.intellij.openapi.ui.MessageType.INFO;
         // Get selected text
         final Editor editor = e.getData(DataKeys.EDITOR);
         if (editor == null) {
@@ -54,17 +52,9 @@ public class MathREPLHelpSelectedSymbol extends MathREPLKernelAction {
         }
         final String text = selectedText.trim();
 
-
-        statusBarBalloonMsg(e, messageType, text);
-        //msp.setInput()
         ToolWindow tw = null;
 
         tw = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindow(TOOL_WINDOW);
-
-        //for(String s : ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindowIds())
-        //{
-        //    System.err.println(s);
-        //}
 
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());
         JScrollPane c = (JScrollPane) msw.getRootPanel();

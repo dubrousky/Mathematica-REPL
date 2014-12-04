@@ -4,14 +4,12 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
-import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import repl.simple.mathematica.MathSessionWrapper;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ResourceBundle;
 
 
 /**
@@ -37,12 +35,10 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
 
     public void actionPerformed(AnActionEvent e) {
 
-        // TODO: find toolbar, get math wrapper and call method connect with the parameters stored
-        // TODO: disable action
+        // find toolbar, get math wrapper and call method connect with the parameters stored
         ToolWindowManager twm = null;
 
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
-        statusBarBalloonMsg(e, MessageType.INFO,twm.getActiveToolWindowId());
 
         ToolWindow tw = twm.getToolWindow("Mathematica REPL");
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());
@@ -53,8 +49,6 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
                     "The connection to the Kernel was stopped.\n"+
                             "To evaluate expression you need to start Kernel again.",
                     NotificationType.INFORMATION).notify( e.getProject() );
-            ResourceBundle rb = ResourceBundle.getBundle("repl.simple.mathematica.resources.MathREPLMessages");
-            statusBarBalloonMsg(e, MessageType.INFO, rb.getString("kernelStopped"));
             // Change Toolbar appearance (name)
         } catch (NoSuchMethodException e1) {
             e1.printStackTrace();
@@ -63,6 +57,7 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
         } catch (InvocationTargetException e3) {
             e3.printStackTrace();
         }
+        // disable the action
         Sessions.put(tw.getContentManager().getSelectedContent().getTabName(),true);
     }
 }

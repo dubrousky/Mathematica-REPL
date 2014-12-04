@@ -15,33 +15,24 @@ import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by alex on 10/15/14.
+ * Creates new session tab at the toolbar.
  */
 public class MathREPLNewSession extends MathREPLKernelAction {
     static int sessionId = 0;
     @Override
     // TODO: Disable action if there are more than configured sessions running
     public void actionPerformed(final AnActionEvent e) {
-        //Project currentProject = DataKeys.PROJECT.getData(actionEvent.getDataContext());
-        //VirtualFile currentFile = DataKeys.VIRTUAL_FILE.getData(actionEvent.getDataContext());
-        //Editor editor = DataKeys.EDITOR.getData(actionEvent.getDataContext());
-        // One of the ERROR/INFO/WARNING
-        com.intellij.openapi.ui.MessageType messageType = com.intellij.openapi.ui.MessageType.INFO;
-
         ToolWindowManager twm = null;
 
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
-        //statusBarBalloonMsg(e, MessageType.INFO,twm.getActiveToolWindowId());
 
         ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
-        //tw.getContentManager().getSelectedContent().putUserData(new Key<Boolean>("enabled"),true);
+
         final MathSessionWrapper msw = MathSessionWrapper.create();
         if( null != msw && msw.hasImplementation() )
         {
             ContentManager cm = tw.getContentManager();
-            // TODO: allow limited number of sessions only (due to the license limitations)
-            // TODO: make it configurable
-            // TODO: make disposable session close the connection to mathematica.
+
             Content c = cm.getFactory().createContent((JScrollPane) msw.getRootPanel(), "MathREPL(" + sessionId + ")", true);
             c.setCloseable(true);
             c.setShouldDisposeContent(true);
