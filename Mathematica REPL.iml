@@ -8,8 +8,5 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="JLink" level="project" />
-    <orderEntry type="library" name="MacOSX-x86" level="application" />
   </component>
 </module>
-
