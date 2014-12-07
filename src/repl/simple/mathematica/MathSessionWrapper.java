@@ -20,16 +20,10 @@ import java.util.Map;
  * JLink compile time dependency.
  */
 public class MathSessionWrapper {
-     // path to the MathLink.jar
-     static String jarPath;
-     // path to the native MathLnk library
-     static String nativePath;
-     // path to the MathKernel executable
-     static String mathKernelPath;
-     // kernel options
-     static String[] mathKernelOptions;
+    // kernel options
+    static String[] mathKernelOptions;
 
-     static Map<String,Method> implMethods;
+    static Map<String,Method> implMethods;
 
     public static Class getImplClass() {
         return implClass;
@@ -44,8 +38,14 @@ public class MathSessionWrapper {
      * object
      * @return
      */
-    public static MathSessionWrapper create(){
-        loadImplementationClass();
+    public static MathSessionWrapper create() {
+        try {
+            loadImplementationClass();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         return new MathSessionWrapper();
     }
 
@@ -66,7 +66,8 @@ public class MathSessionWrapper {
         implObj = null;
         try
         {
-            implObj = implClass.newInstance();
+            if (null != implClass)
+                implObj = implClass.newInstance();
         }
         catch(InstantiationException e)
         {
@@ -76,7 +77,6 @@ public class MathSessionWrapper {
         {
             System.out.println(e.getMessage());
         }
-        // TODO: Add listener to terminate kernel
     }
 
      public Object getRootPanel()
@@ -165,7 +165,7 @@ public class MathSessionWrapper {
         }
         if( null != m )
         {
-            return m.invoke(implObj,params);
+            return m.invoke(implObj, params);
         }
         else
         {
@@ -181,12 +181,15 @@ public class MathSessionWrapper {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public void call(String methodName, Object ... params) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException
+    public void call(String methodName, Object ... params) throws NullPointerException, NoSuchMethodException, IllegalAccessException, InvocationTargetException
     {
         ArrayList<Class> paramClasses = new ArrayList<Class>();
         for( Object p : params )
         {
-         paramClasses.add(p.getClass());
+            if(isWrapperType(p.getClass()))
+                paramClasses.add(getMaybePrimitiveClass(p.getClass()));
+            else
+                paramClasses.add(p.getClass());
         }
         Method m = null;//implMethods.get(methodName);
         if( null == m )
@@ -217,38 +220,60 @@ public class MathSessionWrapper {
      * Loads the com.wolfram.jlink.ui.MathSessionPane class at run time
      * using URLClassLoader from the system path.
      */
-    public static void loadImplementationClass()
-    {
+    private static void loadImplementationClass() throws ClassNotFoundException, MalformedURLException {
         PropertiesComponent pc = PropertiesComponent.getInstance();
         if( null == implClass ) {
-            //jarPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
-            jarPath = pc.getValue("repl.simple.mathematica.mathlink_path");
-            //nativePath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64/";
-            nativePath = pc.getValue("repl.simple.mathematica.native_library_path");
-            //System.setProperty("java.library.path",nativePath);
+
+            String jarPath = pc.getValue("repl.simple.mathematica.mathlink_path");
+
+            String nativePath = pc.getValue("repl.simple.mathematica.native_library_path");
+
             System.setProperty("com.wolfram.jlink", nativePath);
 
-            URL myJarFile = null;
-            try {
-                myJarFile = new URL("file:////" + jarPath);
-            } catch (MalformedURLException e) {
-                System.out.println(e.getMessage());
-                // possibly show message dialog
-                e.printStackTrace();
-            }
+            URL myJarFile = new URL("file:////" + jarPath);
+
             // Get instance of loader for Mathematica jar library
             URLClassLoader cl = URLClassLoader.newInstance(new URL[]{myJarFile});
 
-            try {
-                implClass = cl.loadClass("com.wolfram.jlink.ui.MathSessionPane");
-            } catch (ClassNotFoundException e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-            }
+
+            implClass = cl.loadClass("com.wolfram.jlink.ui.MathSessionPane");
+
         }
     }
 
     public boolean hasImplementation() {
         return null != implClass;
+    }
+
+    public static boolean isWrapperType(Class<?> clazz) {
+        return clazz.equals(Boolean.class) ||
+                clazz.equals(Integer.class) ||
+                clazz.equals(Character.class) ||
+                clazz.equals(Byte.class) ||
+                clazz.equals(Short.class) ||
+                clazz.equals(Double.class) ||
+                clazz.equals(Long.class) ||
+                clazz.equals(Float.class);
+    }
+
+    public static Class getMaybePrimitiveClass(Class<?> clazz) {
+        if(clazz.equals(Boolean.class))
+            return boolean.class;
+        else if(clazz.equals(Integer.class))
+            return int.class;
+        else if( clazz.equals(Character.class))
+            return int.class;
+        else if(clazz.equals(Byte.class))
+            return byte.class;
+        else if(clazz.equals(Short.class))
+            return short.class;
+        else if(clazz.equals(Double.class))
+            return double.class;
+        else if(clazz.equals(Long.class))
+            return long.class;
+        else if(clazz.equals(Float.class))
+            return float.class;
+        else
+            return clazz.getClass();
     }
 }
