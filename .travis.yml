@@ -3,7 +3,7 @@ jdk: openjdk6
 script: mvn clean package
 after_success:
 - cd /tmp
-- git clone https://${GH_TOKEN}@github.com/${GIT_NAME}/${GH_PROJECT_NAME} mathematica_repl_tmp
+- git clone --branch=${TRAVIS_BRANCH} https://${GH_TOKEN}@github.com/${GIT_NAME}/${GH_PROJECT_NAME} mathematica_repl_tmp
 - cd mathematica_repl_tmp
 - cp $CI_HOME/target/Mathematica\ REPL.jar .
 - git config --global user.name $GIT_AUTHOR_NAME
