@@ -61,11 +61,6 @@ public class MathREPLHelpSelectedSymbol extends MathREPLKernelAction {
 
         tw = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindow(TOOL_WINDOW);
 
-        //for(String s : ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindowIds())
-        //{
-        //    System.err.println(s);
-        //}
-
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());
         JScrollPane c = (JScrollPane) msw.getRootPanel();
         JTextPane j = null;

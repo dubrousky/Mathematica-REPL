@@ -14,15 +14,14 @@ import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by alex on 3/18/14.
+ * Allows to select file and then load into the repl.
  */
 public class MathREPLEvaluateFileAction extends MathREPLKernelAction {
-    // TODO: action should be available for running session only
     public void update(AnActionEvent e)
     {
         ToolWindowManager twm = null;
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
-        // FIXME: move tool window name to the base class
+
         ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
 
         Content c = tw.getContentManager().getSelectedContent();
@@ -38,7 +37,8 @@ public class MathREPLEvaluateFileAction extends MathREPLKernelAction {
         f.setSize(500, 500);
         // get path for JLink java library
         FileDialog fd = new FileDialog(f, "Path to the package file", FileDialog.LOAD);
-        fd.setDirectory("/");
+        //get current file as starting point
+        fd.setDirectory(e.getProject().getBasePath());
         fd.setFile("*.m");
         fd.setVisible(true);
         final String path = fd.getDirectory()+fd.getFile();
@@ -46,11 +46,6 @@ public class MathREPLEvaluateFileAction extends MathREPLKernelAction {
         ToolWindow tw = null;
 
         tw = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindow(TOOL_WINDOW);
-
-        //for(String s : ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext())).getToolWindowIds())
-        //{
-        //    System.err.println(s);
-        //}
 
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());
         JScrollPane c = (JScrollPane) msw.getRootPanel();

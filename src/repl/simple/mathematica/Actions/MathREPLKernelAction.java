@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by alex on 7/15/14.
+ * Base kernel related action for keeping track
+ * of running sessions.
  */
 public abstract class MathREPLKernelAction extends MathREPLBaseAction {
     static boolean enabled = true;

@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 
 
 /**
- * Created by alex on 2/2/14.
+ * Terminates the kernel running in the active tab
  */
 public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
     public MathREPLTerminateKernelAction() {
@@ -26,7 +26,7 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
     {
         ToolWindowManager twm = null;
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
-        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+        ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
 
         Content c = tw.getContentManager().getSelectedContent();
 
@@ -36,18 +36,16 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
     }
 
     public void actionPerformed(AnActionEvent e) {
-
-        // TODO: find toolbar, get math wrapper and call method connect with the parameters stored
-        // TODO: disable action
         ToolWindowManager twm = null;
 
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
         statusBarBalloonMsg(e, MessageType.INFO,twm.getActiveToolWindowId());
 
-        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+        ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());
         try {
             msw.call("closeLink");
+            Sessions.put(tw.getContentManager().getSelectedContent().getTabName(),true);
             new Notification("",
                     "JLink",
                     "The connection to the Kernel was stopped.\n"+
@@ -63,6 +61,5 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
         } catch (InvocationTargetException e3) {
             e3.printStackTrace();
         }
-        Sessions.put(tw.getContentManager().getSelectedContent().getTabName(),true);
     }
 }

@@ -9,6 +9,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
+import repl.simple.mathematica.Ui.MathREPLSettings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +25,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
     private JPanel bugReportForm;
 
     public String getReportActionText() {
-        return "";//CppBundle.message("report.to.advancedtools.title");
+        return "";
     }
 
     public SubmittedReportInfo submit(IdeaLoggingEvent[] ideaLoggingEvents, Component component) {
@@ -82,7 +83,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
                 bugReportText.setVisible(false);
             }
 
-            //final CppSupportSettings settings = CppSupportSettings.getInstance();
+            //final MathREPLSettings settings = MathREPLSettings.getInstance();
             mailUser.setText("");
             mailServer.setText("");
 
@@ -171,8 +172,8 @@ public class ErrorReporter extends ErrorReportSubmitter {
             out = sck.getOutputStream();
 
             LineNumberReader is = new LineNumberReader(new StringReader(model.message));
-            String from = "CppToolsForIDEA", send, subj = "Bug report for cfserver";
-            //System.out.println("'"+from+"'");
+            String from = "Mathematica REPL for JIdea", send, subj = "Bug report for Mathematica REPL";
+            System.out.println("'"+from+"'");
 
             readAndPrintResp();
             writeStringReply("HELO " + model.mailUser + "\n");
@@ -221,7 +222,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
      * @param message of bug description
      */
     public static boolean reportBug(String message, Component comp) {
-        final String to = "msk@math-repl.com";
+        final String to = "dubrousky@gmail.com";
 
         StringBuffer buf = new StringBuffer(message.length() + 50);
 
@@ -244,7 +245,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
         model.to = to;
         model.mailserver = form.mailServer.getText();
         model.mailUser = form.mailUser.getText();
-        model.cc = "support@math-repl.com";
+        model.cc = "";
         model.message = form.bugReportText.getText();
 
         sendBugData(model);

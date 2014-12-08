@@ -10,8 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * TODO: Configure action should be performed for disabled tab
- * TODO: Think about storing per tab session parameters (paths, args)
+ * Another entry point for configuration
  */
 public class MathREPLConfigureAction extends MathREPLBaseAction {
     class MathREPLConfig extends DialogWrapper {

@@ -1,77 +1,127 @@
 package repl.simple.mathematica.Actions;
 
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.ui.LoadingDecorator;
+import com.intellij.openapi.util.SimpleTimer;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
+import com.intellij.util.ui.UIUtil;
 import repl.simple.mathematica.MathSessionWrapper;
 
 import javax.swing.*;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.List;
 
 /**
- * Created by alex on 10/15/14.
+ * Creates new session tab at the toolbar.
  */
 public class MathREPLNewSession extends MathREPLKernelAction {
     static int sessionId = 0;
     @Override
-    // TODO: Disable action if there are more than configured sessions running
     public void actionPerformed(final AnActionEvent e) {
         //Project currentProject = DataKeys.PROJECT.getData(actionEvent.getDataContext());
         //VirtualFile currentFile = DataKeys.VIRTUAL_FILE.getData(actionEvent.getDataContext());
         //Editor editor = DataKeys.EDITOR.getData(actionEvent.getDataContext());
         // One of the ERROR/INFO/WARNING
-        com.intellij.openapi.ui.MessageType messageType = com.intellij.openapi.ui.MessageType.INFO;
-
         ToolWindowManager twm = null;
 
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
-        //statusBarBalloonMsg(e, MessageType.INFO,twm.getActiveToolWindowId());
+
 
         ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
-        //tw.getContentManager().getSelectedContent().putUserData(new Key<Boolean>("enabled"),true);
         final MathSessionWrapper msw = MathSessionWrapper.create();
-        if( null != msw && msw.hasImplementation() )
-        {
-            ContentManager cm = tw.getContentManager();
+        if( null != msw && msw.hasImplementation() ) {
+            final ContentManager cm = tw.getContentManager();
             // TODO: allow limited number of sessions only (due to the license limitations)
             // TODO: make it configurable
-            // TODO: make disposable session close the connection to mathematica.
-            Content c = cm.getFactory().createContent((JScrollPane) msw.getRootPanel(), "MathREPL(" + sessionId + ")", true);
-            c.setCloseable(true);
-            c.setShouldDisposeContent(true);
-            // Close link on tab close
-            c.setDisposer(new Disposable() {
-                @Override
-                public void dispose() {
-                    try {
-                        msw.call("closeLink");
-                        new Notification("",
-                                "JLink",
-                                "The connection to the Kernel was disposed.",
-                                NotificationType.INFORMATION).notify( e.getProject() );
-                    } catch (NoSuchMethodException e1) {
-                        e1.printStackTrace();
-                    } catch (IllegalAccessException e1) {
-                        e1.printStackTrace();
-                    } catch (InvocationTargetException e1) {
-                        e1.printStackTrace();
-                    }
+            if (tw.getContentManager().getContentCount() < 3) {
+                try {
+                    // Make it configurable
+                    msw.call("setShowTiming", false);
+                    msw.call("setTextSize", 10);
+                    msw.call("setSyntaxColoring", false);
+
+                    PropertiesComponent pc = PropertiesComponent.getInstance();
+
+
+                    msw.call("setTextColor", Color.decode(pc.getValue("repl.simple.mathematica.text_color")));
+                    msw.call("setSystemSymbolColor", Color.decode(pc.getValue("repl.simple.mathematica.system_color")));
+                    msw.call("setStringColor", Color.decode(pc.getValue("repl.simple.mathematica.string_color")));
+                    msw.call("setMessageColor", Color.decode(pc.getValue("repl.simple.mathematica.message_color")));
+                    msw.call("setCommentColor", Color.decode(pc.getValue("repl.simple.mathematica.comment_color")));
+                    msw.call("setPromptColor", Color.decode(pc.getValue("repl.simple.mathematica.prompt_color")));
+                    msw.call("setBackgroundColor", Color.decode(pc.getValue("repl.simple.mathematica.background")));
+                } catch (NoSuchMethodException e1) {
+                    e1.printStackTrace();
+                } catch (IllegalAccessException e1) {
+                    e1.printStackTrace();
+                } catch (InvocationTargetException e1) {
+                    e1.printStackTrace();
                 }
-            });
-            cm.addContent(c);
-            sessionId += 1;
-            Sessions.put(c.getTabName(), true);
+                final Content c = cm.getFactory().createContent((JComponent) msw.getRootPanel(), "MathREPL(" + sessionId + ")", true);
+                // Make disposable session close the connection to mathematica.
+                c.setCloseable(true);
+                c.setShouldDisposeContent(true);
+                // Close link on tab close
+                c.setDisposer(new Disposable() {
+                    @Override
+                    public void dispose() {
+                        // Invoke later closing
+                        ApplicationManager.getApplication().invokeLater(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            msw.call("closeLink");
+                                            new Notification("REPL",
+                                                    "JLink",
+                                                    "The connection to the Kernel was disposed.",
+                                                    NotificationType.INFORMATION).notify(e.getProject());
+
+                                        } catch (NoSuchMethodException e1) {
+                                            e1.printStackTrace();
+                                        } catch (IllegalAccessException e1) {
+                                            e1.printStackTrace();
+                                        } catch (InvocationTargetException e1) {
+                                            e1.printStackTrace();
+                                        }
+
+                                    }
+                                }
+                        );
+                    }
+                });
+
+                // Set Session Attributes
+                sessionId += 1;
+                Sessions.put(c.getTabName(), true);
+                cm.addContent(c);
+            }
+            else
+            {
+                new Notification("REPL",
+                        "JLink",
+                        "Too many tabs are opened - number of Mathematica Kernel is limited.",
+                        NotificationType.WARNING).notify(e.getProject());
+            }
         }
-        // if implementation class was not loaded notify the
+        // if implementation class was not loaded send notification
         else
         {
-            new Notification("",
+            new Notification("REPL",
                              "JLink loading error",
                              "The plugin was unable to load the class\n"+
                                      "required for starting Mathematica sessions.\n"+

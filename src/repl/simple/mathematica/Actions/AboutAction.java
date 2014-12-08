@@ -30,6 +30,7 @@ public class AboutAction extends MathREPLBaseAction {
             myAboutInfo.setText(rb.getString("aboutInfo"));
             myProject = project;
             init();
+            this.pack();
         }
 
         @Nullable
