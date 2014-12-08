@@ -5,16 +5,20 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.ui.LoadingDecorator;
+import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentManager;
 import repl.simple.mathematica.MathSessionWrapper;
 
+import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
 /**
- * Created by alex on 2/2/14.
+ * Starts new kernel session in the tab
  */
 public class MathREPLStartKernelAction extends MathREPLKernelAction {
 
@@ -26,7 +30,7 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
     {
         ToolWindowManager twm = null;
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
-        ToolWindow tw = twm.getToolWindow("Mathematica REPL");
+        ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
 
         Content c = tw.getContentManager().getSelectedContent();
 
@@ -37,13 +41,16 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
     }
 
     public void actionPerformed(AnActionEvent e) {
+
+        // get link status
         ToolWindowManager twm = null;
 
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
 
 
         ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
-        Content c = tw.getContentManager().getSelectedContent();
+        ContentManager cm = tw.getContentManager();
+        Content c = cm.getSelectedContent();
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(c.getComponent());
         if(null != msw)
         {
@@ -53,12 +60,18 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
 
             try {
                 ResourceBundle rb = ResourceBundle.getBundle("repl.simple.mathematica.resources.MathREPLMessages");
-                msw.call("setLinkArguments",args);
+                msw.call("setLinkArguments", args);
+                // Set reasonable timeout to reach the kernel
+                msw.call("setConnectTimeout",(int)10000);
                 msw.call("connect");
-                new Notification("",
+                // TODO: put notification in the resources
+                new Notification("REPL",
                         "JLink",
                         "The connection to the Kernel was established.",
                         NotificationType.INFORMATION).notify( e.getProject() );
+
+                Sessions.put(c.getTabName(),false);
+
             } catch (NoSuchMethodException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException ex) {
@@ -68,6 +81,6 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
             }
 
         }
-        Sessions.put(c.getTabName(),false);
+
     }
 }

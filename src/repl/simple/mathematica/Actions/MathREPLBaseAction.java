@@ -12,6 +12,7 @@ import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.awt.RelativePoint;
+import repl.simple.mathematica.MathIcons;
 
 import java.awt.*;
 
@@ -22,7 +23,7 @@ public abstract class MathREPLBaseAction extends AnAction {
     public static final String TOOL_WINDOW = "Mathematica REPL";
     public MathREPLBaseAction() {
         super();
-        getTemplatePresentation().setIcon(IconLoader.findIcon("/repl/simple/mathematica/resources/icon-run.png"));
+        getTemplatePresentation().setIcon(MathIcons.ACTION);
     }
 
     public void statusBarBalloonMsg(AnActionEvent e, MessageType messageType, String htmlContent) {

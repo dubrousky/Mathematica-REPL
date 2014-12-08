@@ -1,11 +1,16 @@
 package repl.simple.mathematica;
 /**
- * Created by alex on 2/2/14.
+ * Contains plugin icons
  */
 import com.intellij.openapi.util.IconLoader;
 
 import javax.swing.*;
 
 public class MathIcons {
-    public static final Icon FILE = IconLoader.getIcon("/repl/simple/mathematica/resources/mathematica.gif");
+    // File icon
+    public static final Icon FILE = IconLoader.getIcon("/repl/simple/mathematica/resources/icon-run.png");
+    // Action icon
+    public static final Icon ACTION = IconLoader.getIcon("/repl/simple/mathematica/resources/icon-run.png");
+    // Tab icon
+    public static final Icon TAB = IconLoader.getIcon("/repl/simple/mathematica/resources/icon-run.png");
 }

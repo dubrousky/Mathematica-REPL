@@ -1,9 +1,9 @@
 package repl.simple.mathematica;
-/**
- * Created by alex on 2/2/14.
- */
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
 
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
+/*
+* Tool menu action group
+*/
 public class MathREPLActionGroup extends DefaultActionGroup {
 
 }

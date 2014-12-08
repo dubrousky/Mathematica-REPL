@@ -17,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
  * Allows to select file and then load into the repl.
  */
 public class MathREPLEvaluateFileAction extends MathREPLKernelAction {
-    // TODO: action should be available for running session only
     public void update(AnActionEvent e)
     {
         ToolWindowManager twm = null;
@@ -38,7 +37,8 @@ public class MathREPLEvaluateFileAction extends MathREPLKernelAction {
         f.setSize(500, 500);
         // get path for JLink java library
         FileDialog fd = new FileDialog(f, "Path to the package file", FileDialog.LOAD);
-        fd.setDirectory("/");
+        //get current file as starting point
+        fd.setDirectory(e.getProject().getBasePath());
         fd.setFile("*.m");
         fd.setVisible(true);
         final String path = fd.getDirectory()+fd.getFile();

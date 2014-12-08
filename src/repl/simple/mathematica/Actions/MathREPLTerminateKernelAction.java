@@ -13,7 +13,11 @@ import java.lang.reflect.InvocationTargetException;
 
 
 /**
+<<<<<<< HEAD
  * Terminates the Kernel session
+=======
+ * Terminates the kernel running in the active tab
+>>>>>>> 8ebc6dc... Cleanup code and add rework the actions. Added storage for plugin icons.
  */
 public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
     public MathREPLTerminateKernelAction() {
@@ -44,6 +48,7 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
         final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());
         try {
             msw.call("closeLink");
+            Sessions.put(tw.getContentManager().getSelectedContent().getTabName(),true);
             new Notification("",
                     "JLink",
                     "The connection to the Kernel was stopped.\n"+
@@ -58,7 +63,5 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
         } catch (InvocationTargetException e3) {
             e3.printStackTrace();
         }
-        // disable the action
-        Sessions.put(tw.getContentManager().getSelectedContent().getTabName(),true);
     }
 }
