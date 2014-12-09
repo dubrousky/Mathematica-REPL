@@ -52,11 +52,11 @@ public class MathREPLNewSession extends MathREPLKernelAction {
                     // Make it configurable
                     msw.call("setShowTiming", false);
                     msw.call("setTextSize", 10);
-                    msw.call("setSyntaxColoring", false);
+
 
                     PropertiesComponent pc = PropertiesComponent.getInstance();
 
-
+                    msw.call("setSyntaxColoring",Boolean.parseBoolean(pc.getValue("repl.simple.mathematica.syntax_highlight")));
                     msw.call("setTextColor", Color.decode(pc.getValue("repl.simple.mathematica.text_color")));
                     msw.call("setSystemSymbolColor", Color.decode(pc.getValue("repl.simple.mathematica.system_color")));
                     msw.call("setStringColor", Color.decode(pc.getValue("repl.simple.mathematica.string_color")));

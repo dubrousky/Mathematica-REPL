@@ -184,6 +184,7 @@ public class MathREPLSettings implements Configurable {
         confInst.messageColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.message_color",messageColor.getRGB())));
         confInst.commentColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.comment_color", commentColor.getRGB())));
         confInst.promptColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.prompt_color", promptColor.getRGB())));
+        confInst.syntaxHighlight.setSelected(Boolean.parseBoolean(pc.getOrInit("repl.simple.mathematica.syntax_highlight", "true")));
         return confInst.getRootPanel();
     }
 
@@ -204,7 +205,8 @@ public class MathREPLSettings implements Configurable {
                 || pc.getValue("repl.simple.mathematica.message_color")    != Integer.toString(confInst.getMessageColor().getSelectedColor().getRGB())
                 || pc.getValue("repl.simple.mathematica.string_color")     != Integer.toString(confInst.getStringColor().getSelectedColor().getRGB())
                 || pc.getValue("repl.simple.mathematica.system_color")     != Integer.toString(confInst.getSystemColor().getSelectedColor().getRGB())
-                || pc.getValue("repl.simple.mathematica.prompt_color")     != Integer.toString(confInst.getPromptColor().getSelectedColor().getRGB());
+                || pc.getValue("repl.simple.mathematica.prompt_color")     != Integer.toString(confInst.getPromptColor().getSelectedColor().getRGB())
+                || pc.getValue("repl.simple.mathematica.syntax_highlight") != String.valueOf(confInst.syntaxHighlight.isSelected());
     }
 
     /**
@@ -239,6 +241,8 @@ public class MathREPLSettings implements Configurable {
         pc.setValue("repl.simple.mathematica.message_color",Integer.toString(confInst.messageColor.getSelectedColor().getRGB()));
         pc.setValue("repl.simple.mathematica.prompt_color",Integer.toString(confInst.promptColor.getSelectedColor().getRGB()));
         pc.setValue("repl.simple.mathematica.comment_color",Integer.toString(confInst.commentColor.getSelectedColor().getRGB()));
+        pc.setValue("repl.simple.mathematica.syntax_highlight",String.valueOf(confInst.syntaxHighlight.isSelected()));
+
     }
 
     /**
@@ -261,6 +265,8 @@ public class MathREPLSettings implements Configurable {
         confInst.messageColor.setSelectedColor(Color.decode(pc.getOrInit("repl.simple.mathematica.message_color", Integer.toString(messageColor.getRGB()))));
         confInst.commentColor.setSelectedColor(Color.decode(pc.getOrInit("repl.simple.mathematica.comment_color", Integer.toString(commentColor.getRGB()))));
         confInst.promptColor.setSelectedColor(Color.decode(pc.getOrInit("repl.simple.mathematica.prompt_color", Integer.toString(promptColor.getRGB()))));
+        confInst.syntaxHighlight.setSelected(Boolean.parseBoolean(pc.getOrInit("repl.simple.mathematica.syntax_highlight", "true")));
+
     }
 
     /**
