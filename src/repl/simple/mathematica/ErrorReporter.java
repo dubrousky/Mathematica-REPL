@@ -7,67 +7,64 @@ import com.intellij.openapi.diagnostic.SubmittedReportInfo;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.util.Consumer;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import repl.simple.mathematica.Ui.MathREPLSettings;
+import org.apache.commons.net.PrintCommandListener;
+import org.apache.commons.net.smtp.SMTPSClient;
+import org.apache.commons.net.smtp.SMTPReply;
+import org.apache.commons.net.smtp.SimpleSMTPHeader;
+
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.net.Socket;
+import java.rmi.ConnectException;
 
 /**
- * User: maxim
- * Date: 07.08.2008
- * Time: 4:09:29
+ * Allows sending bug reports to the author of plugin
  */
 public class ErrorReporter extends ErrorReportSubmitter {
     private JPanel bugReportForm;
 
+
+    @Override
     public String getReportActionText() {
-        return "";
+        return "Report";
     }
 
-    public SubmittedReportInfo submit(IdeaLoggingEvent[] ideaLoggingEvents, Component component) {
-        StringBuilder builder = new StringBuilder();
-        for (IdeaLoggingEvent evt : ideaLoggingEvents) builder.append(evt.getMessage());
-        final boolean b = reportBug(builder.toString(), component);
-        return new SubmittedReportInfo(null, "email", b ? SubmittedReportInfo.SubmissionStatus.NEW_ISSUE: SubmittedReportInfo.SubmissionStatus.FAILED);
-    }
+    @Override
+     public boolean submit(@NotNull IdeaLoggingEvent[] events, @Nullable String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer)
+     {
+         StringBuilder builder = new StringBuilder();
+         for (IdeaLoggingEvent evt : events) builder.append(evt.getMessage());
+         builder.append("\n");
+         builder.append(additionalInfo);
+         final boolean b = reportBug(builder.toString(), parentComponent);
 
-    static boolean debug = false;
-    static InputStream in;
-    static OutputStream out;
-    static byte[] buffer = new byte[500];
-    static char[] buf = new char[500];
-
-    static void readAndPrintResp() throws IOException {
-        int len = in.read(buffer, 0, buffer.length);
-        if (debug) System.out.println(new String(buffer, 0, len));
-    }
-
-    static void writeStringReply(String what) throws IOException {
-        int len = what.length();
-        if (len > buf.length) buf = new char[len];
-        what.getChars(0, len, buf, 0);
-        if (buf.length > buffer.length) buffer = new byte[buf.length];
-        for (int i = 0; i < len; i++) buffer[i] = (byte) buf[i];
-        out.write(buffer, 0, len);
-        if (debug) System.out.print(what);
-    }
+         consumer.consume(new SubmittedReportInfo(null, "email", b ? SubmittedReportInfo.SubmissionStatus.NEW_ISSUE: SubmittedReportInfo.SubmissionStatus.FAILED));
+         return b;
+     }
+    // FIXME:
+    //public SubmittedReportInfo submit(IdeaLoggingEvent[] ideaLoggingEvents, Component component) {
+    //    StringBuilder builder = new StringBuilder();
+    //    for (IdeaLoggingEvent evt : ideaLoggingEvents) builder.append(evt.getMessage());
+    //
+    //    final boolean b = reportBug(builder.toString(), component);
+    //    return new SubmittedReportInfo(null, "email", b ? SubmittedReportInfo.SubmissionStatus.NEW_ISSUE: SubmittedReportInfo.SubmissionStatus.FAILED);
+    //}
 
     static final class BugReportModel {
         String to;
         String cc;
         String mailserver;
-        String mailUser;
+        String mailuser;
         String message;
     }
 
     static class BugReportForm extends DialogWrapper {
         private JTextPane bugReportText;
         private JTextField mailUser;
-        private JTextField mailServer;
         private JPanel myPanel;
 
         BugReportForm(String _bugReport, Component parent) {
@@ -82,24 +79,19 @@ public class ErrorReporter extends ErrorReportSubmitter {
             } else {
                 bugReportText.setVisible(false);
             }
-
+            // TODO: save user settings
             //final MathREPLSettings settings = MathREPLSettings.getInstance();
-            mailUser.setText("");
-            mailServer.setText("");
+            mailUser.setText("noreply");
 
             init();
-        }
-
-        @NonNls
-        protected String getDimensionServiceKey() {
-            return "repl.simple.mathematica.BugReportForm";
+            pack();
         }
 
         protected void doOKAction() {
             super.doOKAction();
 
             //final CppSupportSettings settings = CppSupportSettings.getInstance();
-            //settings.setMailUser(mailUser.getText());
+            //settings.setMailUser(mailuser.getText());
             //settings.setMailServer(mailServer.getText());
         }
 
@@ -124,29 +116,20 @@ public class ErrorReporter extends ErrorReportSubmitter {
          */
         private void $$$setupUI$$$() {
             myPanel = new JPanel();
-            myPanel.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
-            final JLabel label1 = new JLabel();
-            label1.setText("Mail server:");
-            label1.setDisplayedMnemonic('S');
-            label1.setDisplayedMnemonicIndex(5);
-            myPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-            mailServer = new JTextField();
-            myPanel.add(mailServer, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+            myPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
             final JScrollPane scrollPane1 = new JScrollPane();
-            myPanel.add(scrollPane1, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+            myPanel.add(scrollPane1, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
             scrollPane1.setBorder(BorderFactory.createTitledBorder("Bug report"));
             bugReportText = new JTextPane();
             bugReportText.setMaximumSize(new Dimension(200, 200));
             scrollPane1.setViewportView(bugReportText);
             mailUser = new JTextField();
-            myPanel.add(mailUser, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-            final JLabel label2 = new JLabel();
-            label2.setText("Mail user:");
-            label2.setDisplayedMnemonic('U');
-            label2.setDisplayedMnemonicIndex(5);
-            myPanel.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-            label1.setLabelFor(mailServer);
-            label2.setLabelFor(mailUser);
+            mailUser.setText("noreply");
+            myPanel.add(mailUser, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+            final JLabel label1 = new JLabel();
+            label1.setText("Your Email:");
+            myPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+            label1.setLabelFor(mailUser);
         }
 
         /**
@@ -163,56 +146,48 @@ public class ErrorReporter extends ErrorReportSubmitter {
      * @param model of bug report
      */
     private static synchronized void sendBugData(BugReportModel model) {
-        String mailserver = model.mailserver;
-        int mailport = 25;
+        String subject;
+        Writer writer;
+        SimpleSMTPHeader header;
+        SMTPSClient client;
+        //
+        subject  = "Bug report for Mathematica REPL";
+        try
+        {
+            header = new SimpleSMTPHeader(model.mailuser, model.to, subject);
 
-        try {
-            Socket sck = new Socket(mailserver, mailport);
-            in = sck.getInputStream();
-            out = sck.getOutputStream();
+            client = new SMTPSClient();
+            client.addProtocolCommandListener(new PrintCommandListener(
+                                                  new PrintWriter(System.out), true));
 
-            LineNumberReader is = new LineNumberReader(new StringReader(model.message));
-            String from = "Mathematica REPL for JIdea", send, subj = "Bug report for Mathematica REPL";
-            System.out.println("'"+from+"'");
-
-            readAndPrintResp();
-            writeStringReply("HELO " + model.mailUser + "\n");
-            readAndPrintResp();
-            writeStringReply("MAIL From: " + from + "\n");
-            readAndPrintResp();
-
-            writeStringReply("RCPT To: " + model.to + "\n");
-            readAndPrintResp();
-            String cc = model.cc;
-            if (cc != null && cc.length() > 0) {
-                writeStringReply("RCPT TO: " + cc + "\n");
-                readAndPrintResp();
+            client.connect(model.mailserver);
+            if (!SMTPReply.isPositiveCompletion(client.getReplyCode()))
+            {
+                client.disconnect();
+                throw  new ConnectException("SMTP server refused connection.");
             }
-            writeStringReply("DATA\n");
-            readAndPrintResp();
+            client.helo("localhost");
+            if(client.execTLS()) {
 
-            writeStringReply("From: " + from + "\n");
-            writeStringReply("To: " + model.to + "\n");
-            if (cc != null && cc.length() > 0) {
-                writeStringReply("Cc: " + cc + "\n");
+                client.login();
+                client.setSender(model.mailuser);
+                client.addRecipient(model.to);
+
+                writer = client.sendMessageData();
+
+                if (writer != null) {
+                    writer.write(header.toString());
+                    writer.write(model.message);
+                    writer.close();
+                    client.completePendingCommand();
+                }
             }
-
-            writeStringReply("Subject: " + subj + "\n\n");
-
-            while (true) {
-                send = is.readLine();
-                if (send == null) break;
-
-                writeStringReply(send + "\n");
-            }
-            is.close();
-
-            writeStringReply(".\n");
-            writeStringReply(".\n");
-            readAndPrintResp();
-            writeStringReply("QUIT");
-        } catch (Exception e) {
-            if (debug) e.printStackTrace();
+            client.logout();
+            client.disconnect();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -227,7 +202,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
         StringBuffer buf = new StringBuffer(message.length() + 50);
 
         buf.append("Idea version:");
-        buf.append(ApplicationInfo.getInstance().getVersionName());
+        buf.append(ApplicationInfo.getInstance().getFullVersion());
         buf.append('\n');
 
         buf.append("Plugin version:");
@@ -243,9 +218,9 @@ public class ErrorReporter extends ErrorReportSubmitter {
         final BugReportModel model = new BugReportModel();
 
         model.to = to;
-        model.mailserver = form.mailServer.getText();
-        model.mailUser = form.mailUser.getText();
-        model.cc = "";
+        // use restricted gmail server
+        model.mailserver = "aspmx.l.google.com";
+        model.mailuser = form.mailUser.getText();
         model.message = form.bugReportText.getText();
 
         sendBugData(model);
