@@ -33,26 +33,26 @@ public class ErrorReporter extends ErrorReportSubmitter {
         return "Report";
     }
 
-    @Override
-     public boolean submit(@NotNull IdeaLoggingEvent[] events, @Nullable String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer)
-     {
-         StringBuilder builder = new StringBuilder();
-         for (IdeaLoggingEvent evt : events) builder.append(evt.getMessage());
-         builder.append("\n");
-         builder.append(additionalInfo);
-         final boolean b = reportBug(builder.toString(), parentComponent);
+    public boolean submit(@NotNull IdeaLoggingEvent[] events, @Nullable String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer)
+    {
+     StringBuilder builder = new StringBuilder();
+     for (IdeaLoggingEvent evt : events) builder.append(evt.getMessage());
+     builder.append("\n");
+     builder.append(additionalInfo);
+     final boolean b = reportBug(builder.toString(), parentComponent);
 
-         consumer.consume(new SubmittedReportInfo(null, "email", b ? SubmittedReportInfo.SubmissionStatus.NEW_ISSUE: SubmittedReportInfo.SubmissionStatus.FAILED));
-         return b;
-     }
-    // FIXME:
-    //public SubmittedReportInfo submit(IdeaLoggingEvent[] ideaLoggingEvents, Component component) {
-    //    StringBuilder builder = new StringBuilder();
-    //    for (IdeaLoggingEvent evt : ideaLoggingEvents) builder.append(evt.getMessage());
-    //
-    //    final boolean b = reportBug(builder.toString(), component);
-    //    return new SubmittedReportInfo(null, "email", b ? SubmittedReportInfo.SubmissionStatus.NEW_ISSUE: SubmittedReportInfo.SubmissionStatus.FAILED);
-    //}
+     consumer.consume(new SubmittedReportInfo(null, "email", b ? SubmittedReportInfo.SubmissionStatus.NEW_ISSUE: SubmittedReportInfo.SubmissionStatus.FAILED));
+     return b;
+    }
+
+    @Deprecated
+    public SubmittedReportInfo submit(IdeaLoggingEvent[] events, Component parentComponent) {
+        StringBuilder builder = new StringBuilder();
+        for (IdeaLoggingEvent evt : events) builder.append(evt.getMessage());
+        builder.append("\n");
+        final boolean b = reportBug(builder.toString(), parentComponent);
+        return new SubmittedReportInfo(null, "email", b ? SubmittedReportInfo.SubmissionStatus.NEW_ISSUE: SubmittedReportInfo.SubmissionStatus.FAILED);
+    }
 
     static final class BugReportModel {
         String to;
