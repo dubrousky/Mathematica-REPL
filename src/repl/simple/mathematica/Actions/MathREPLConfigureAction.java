@@ -4,6 +4,7 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;
+import repl.simple.mathematica.MathREPLBundle;
 import repl.simple.mathematica.Ui.ConfigCenterPanel;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class MathREPLConfigureAction extends MathREPLBaseAction {
         public MathREPLConfig() {
             super(false);
             super.init();
-            setTitle("Mathematica Paths");
+            setTitle(MathREPLBundle.message("configActionTitle"));
             this.pack();
         }
         @Nullable
@@ -39,7 +40,6 @@ public class MathREPLConfigureAction extends MathREPLBaseAction {
             center.getMessageColor().setSelectedColor(Color.decode(pc.getValue("repl.simple.mathematica.message_color")));
             center.getCommentColor().setSelectedColor(Color.decode(pc.getValue("repl.simple.mathematica.comment_color")));
             center.getPromptColor().setSelectedColor(Color.decode(pc.getValue("repl.simple.mathematica.prompt_color")));
-
             return ((ConfigCenterPanel)center).getRootPanel();
         }
     }

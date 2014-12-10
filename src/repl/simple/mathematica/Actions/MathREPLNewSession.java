@@ -17,6 +17,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
 import com.intellij.util.ui.UIUtil;
+import repl.simple.mathematica.MathREPLBundle;
 import repl.simple.mathematica.MathSessionWrapper;
 
 import javax.swing.*;
@@ -88,7 +89,7 @@ public class MathREPLNewSession extends MathREPLKernelAction {
                                             msw.call("closeLink");
                                             new Notification("REPL",
                                                     "JLink",
-                                                    "The connection to the Kernel was disposed.",
+                                                    MathREPLBundle.message("connectionDisposed"),
                                                     NotificationType.INFORMATION).notify(e.getProject());
 
                                         } catch (NoSuchMethodException e1) {
@@ -114,7 +115,7 @@ public class MathREPLNewSession extends MathREPLKernelAction {
             {
                 new Notification("REPL",
                         "JLink",
-                        "Too many tabs are opened - number of Mathematica Kernel is limited.",
+                        MathREPLBundle.message("tooManyTabs"),
                         NotificationType.WARNING).notify(e.getProject());
             }
         }
@@ -122,10 +123,8 @@ public class MathREPLNewSession extends MathREPLKernelAction {
         else
         {
             new Notification("REPL",
-                             "JLink loading error",
-                             "The plugin was unable to load the class\n"+
-                                     "required for starting Mathematica sessions.\n"+
-                                     "Please, configure the plugin paths.",
+                             "JLink",
+                             MathREPLBundle.message("loadJLinkError"),
                              NotificationType.ERROR).notify(e.getProject());
         }
     }

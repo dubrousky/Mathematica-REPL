@@ -30,7 +30,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
 
     @Override
     public String getReportActionText() {
-        return "Report";
+        return MathREPLBundle.message("report");
     }
 
     public boolean submit(@NotNull IdeaLoggingEvent[] events, @Nullable String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer)
@@ -70,8 +70,8 @@ public class ErrorReporter extends ErrorReportSubmitter {
         BugReportForm(String _bugReport, Component parent) {
             super(parent, true);
 
-            setOKButtonText("Send");
-            setCancelButtonText("Do not send");
+            setOKButtonText(MathREPLBundle.message("doSend"));
+            setCancelButtonText(MathREPLBundle.message("notSend"));
             setModal(true);
 
             if (_bugReport != null && _bugReport.length() > 0) {
@@ -79,8 +79,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
             } else {
                 bugReportText.setVisible(false);
             }
-            // TODO: save user settings
-            //final MathREPLSettings settings = MathREPLSettings.getInstance();
+
             mailUser.setText("noreply");
 
             init();
@@ -90,9 +89,6 @@ public class ErrorReporter extends ErrorReportSubmitter {
         protected void doOKAction() {
             super.doOKAction();
 
-            //final CppSupportSettings settings = CppSupportSettings.getInstance();
-            //settings.setMailUser(mailuser.getText());
-            //settings.setMailServer(mailServer.getText());
         }
 
         @Nullable
@@ -151,7 +147,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
         SimpleSMTPHeader header;
         SMTPSClient client;
         //
-        subject  = "Bug report for Mathematica REPL";
+        subject  = MathREPLBundle.message("reportSubject");
         try
         {
             header = new SimpleSMTPHeader(model.mailuser, model.to, subject);
@@ -164,7 +160,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
             if (!SMTPReply.isPositiveCompletion(client.getReplyCode()))
             {
                 client.disconnect();
-                throw  new ConnectException("SMTP server refused connection.");
+                throw  new ConnectException(MathREPLBundle.message("smtpFailure"));
             }
             client.helo("localhost");
             if(client.execTLS()) {
@@ -197,7 +193,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
      * @param message of bug description
      */
     public static boolean reportBug(String message, Component comp) {
-        final String to = "dubrousky@gmail.com";
+        final String to = MathREPLBundle.message("authorEmail");
 
         StringBuffer buf = new StringBuffer(message.length() + 50);
 
@@ -206,7 +202,7 @@ public class ErrorReporter extends ErrorReportSubmitter {
         buf.append('\n');
 
         buf.append("Plugin version:");
-        buf.append("0.0.1");//Plugin Version
+        buf.append(MathREPLBundle.message("pluginVersion"));
         buf.append('\n');
 
         buf.append(message);

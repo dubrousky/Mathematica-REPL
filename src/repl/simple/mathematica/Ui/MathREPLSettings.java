@@ -68,7 +68,7 @@ public class MathREPLSettings implements Configurable {
     {
         if(SystemInfo.isWindows) {
             mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\MathKernel";
-            nativeLibraryPath = "";
+            nativeLibraryPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\SystemFiles\\Links\\JLink\\JLink.jar";
             mathLinkPath = "";
         } else if(SystemInfo.isMac) {
             mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
@@ -277,6 +277,6 @@ public class MathREPLSettings implements Configurable {
         confInst = null;
     }
 
-    public String getPluginVersion() { return "0.0.1"; }
+    public String getPluginVersion() { return "0.0.2"; }
 
 }
