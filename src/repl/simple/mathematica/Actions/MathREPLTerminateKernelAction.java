@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
+import repl.simple.mathematica.MathREPLBundle;
 import repl.simple.mathematica.MathSessionWrapper;
 
 import java.lang.reflect.InvocationTargetException;
@@ -49,12 +50,10 @@ public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
         try {
             msw.call("closeLink");
             Sessions.put(tw.getContentManager().getSelectedContent().getTabName(),true);
-            new Notification("",
+            new Notification("REPL",
                     "JLink",
-                    "The connection to the Kernel was stopped.\n"+
-                            "To evaluate expression you need to start Kernel again.",
+                    MathREPLBundle.message("kernelStopped"),
                     NotificationType.INFORMATION).notify( e.getProject() );
-
             // Change Toolbar appearance (name)
         } catch (NoSuchMethodException e1) {
             e1.printStackTrace();

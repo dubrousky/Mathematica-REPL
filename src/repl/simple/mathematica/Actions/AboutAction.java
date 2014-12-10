@@ -7,6 +7,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import org.jetbrains.annotations.Nullable;
+import repl.simple.mathematica.MathREPLBundle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,8 +27,7 @@ public class AboutAction extends MathREPLBaseAction {
 
         MyAboutDialog(Project project) {
             super(project, true);
-            ResourceBundle rb = ResourceBundle.getBundle("repl.simple.mathematica.resources.MathREPLMessages");
-            myAboutInfo.setText(rb.getString("aboutInfo"));
+            myAboutInfo.setText(MathREPLBundle.message("aboutInfo"));
             myProject = project;
             init();
             this.pack();

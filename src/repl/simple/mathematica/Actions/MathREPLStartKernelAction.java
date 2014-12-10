@@ -11,6 +11,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
+import repl.simple.mathematica.MathREPLBundle;
 import repl.simple.mathematica.MathSessionWrapper;
 
 import javax.swing.*;
@@ -64,12 +65,10 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
                 // Set reasonable timeout to reach the kernel
                 msw.call("setConnectTimeout",(int)10000);
                 msw.call("connect");
-                // TODO: put notification in the resources
                 new Notification("REPL",
                         "JLink",
-                        "The connection to the Kernel was established.",
-                        NotificationType.INFORMATION).notify( e.getProject() );
-
+                        MathREPLBundle.message("connectionEstablished"),
+                        NotificationType.INFORMATION).notify(e.getProject());
                 Sessions.put(c.getTabName(),false);
 
             } catch (NoSuchMethodException ex) {
