@@ -14,11 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 
 
 /**
-<<<<<<< HEAD
- * Terminates the Kernel session
-=======
  * Terminates the kernel running in the active tab
->>>>>>> 8ebc6dc... Cleanup code and add rework the actions. Added storage for plugin icons.
  */
 public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
     public MathREPLTerminateKernelAction() {
