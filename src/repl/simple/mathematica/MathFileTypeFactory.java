@@ -15,16 +15,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package repl.simple.mathematica.Actions;
+package repl.simple.mathematica;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.intellij.openapi.fileTypes.FileTypeConsumer;
+import com.intellij.openapi.fileTypes.FileTypeFactory;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * Base kernel related action for keeping track
- * of running sessions.
- */
-public abstract class MathREPLKernelAction extends MathREPLBaseAction {
-    static boolean enabled = true;
-    static Map<String,Boolean> Sessions= new HashMap<String,Boolean>();
+public class MathFileTypeFactory extends FileTypeFactory{
+    @Override
+    public void createFileTypes(@NotNull FileTypeConsumer fileTypeConsumer) {
+        fileTypeConsumer.consume(MathFileType.INSTANCE, "mws");
+    }
 }

@@ -163,7 +163,17 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
+  <component name="libraryTable">
+    <library name="JLink">
+      <CLASSES>
+        <root url="jar:///Volumes/sys/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+  </component>
   <component name="uidesigner-configuration">
     <option name="INSTRUMENT_CLASSES" value="false" />
+    <option name="DEFAULT_FIELD_ACCESSIBILITY" value="package local" />
   </component>
 </project>
