@@ -20,6 +20,8 @@ package repl.simple.mathematica.Actions;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
@@ -50,15 +52,9 @@ public class MathREPLEvaluateFileAction extends MathREPLKernelAction {
     }
     public void actionPerformed(AnActionEvent e) {
         // Open file selection, read through the link
-        Frame f = new Frame();
-        f.setSize(500, 500);
-        // get path for JLink java library
-        FileDialog fd = new FileDialog(f, "Path to the package file", FileDialog.LOAD);
-        //get current file as starting point
-        fd.setDirectory(e.getProject().getBasePath());
-        fd.setFile("*.m");
-        fd.setVisible(true);
-        final String path = fd.getDirectory()+fd.getFile();
+        final String path = FileChooser.chooseFile(new FileChooserDescriptor(true,false,false,false,false,false),
+                                                    e.getProject(),
+                                                    e.getProject().getBaseDir()).getPath();
         // Wait for response
         ToolWindow tw = null;
 
