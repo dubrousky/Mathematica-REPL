@@ -66,8 +66,8 @@ public class MathREPLNewSession extends MathREPLKernelAction {
                     // Make it configurable
                     msw.call("setShowTiming", false);
                     msw.call("setTextSize", 10);
-
-
+                    // Do not use the front end to render plots
+                    msw.call("setFrontEndGraphics",false);
                     PropertiesComponent pc = PropertiesComponent.getInstance();
 
                     msw.call("setSyntaxColoring",Boolean.parseBoolean(pc.getValue("repl.simple.mathematica.syntax_highlight")));
