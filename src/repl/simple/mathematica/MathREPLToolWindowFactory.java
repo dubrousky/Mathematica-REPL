@@ -36,8 +36,12 @@ public class MathREPLToolWindowFactory implements ToolWindowFactory {
         group.add(actionManager.getAction("MathREPL.repl.simple.mathematica.Actions.MathREPLNewSession"));
         group.add(actionManager.getAction("MathREPL.repl.simple.mathematica.Actions.MathREPLStartKernelAction"));
         group.add(actionManager.getAction("MathREPL.repl.simple.mathematica.Actions.MathREPLTerminateKernelAction"));
-        ((ToolWindowEx)toolWindow).setTitleActions(actionManager.getAction("MathREPL.repl.simple.mathematica.Actions.MathREPLStartKernelAction"),
-                actionManager.getAction("MathREPL.repl.simple.mathematica.Actions.MathREPLTerminateKernelAction"));
+
         ((ToolWindowEx)toolWindow).setAdditionalGearActions(group);
+        /*
+        ((ToolWindowEx)toolWindow).setTitleActions(
+                actionManager.getAction("MathREPL.repl.simple.mathematica.Actions.MathREPLStartKernelAction"),
+                actionManager.getAction("MathREPL.repl.simple.mathematica.Actions.MathREPLTerminateKernelAction"));
+        */
     }
 }
