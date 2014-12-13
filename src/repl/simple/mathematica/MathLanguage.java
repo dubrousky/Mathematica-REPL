@@ -15,16 +15,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package repl.simple.mathematica.Actions;
 
-import java.util.HashMap;
-import java.util.Map;
+package repl.simple.mathematica;
 
-/**
- * Base kernel related action for keeping track
- * of running sessions.
- */
-public abstract class MathREPLKernelAction extends MathREPLBaseAction {
-    static boolean enabled = true;
-    static Map<String,Boolean> Sessions= new HashMap<String,Boolean>();
+import com.intellij.lang.Language;
+
+public class MathLanguage extends Language {
+    public static final MathLanguage INSTANCE = new MathLanguage();
+
+    private MathLanguage() {
+        super("Mathematica");
+    }
 }

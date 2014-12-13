@@ -1,3 +1,20 @@
+/*
+    Mathematica REPL IntelliJ IDEA plugin
+    Copyright (C) 2014  Aliaksandr Dubrouski
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package repl.simple.mathematica.Actions;
 
 import com.intellij.ide.util.PropertiesComponent;
@@ -9,14 +26,10 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.ui.LoadingDecorator;
-import com.intellij.openapi.util.SimpleTimer;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
-import com.intellij.util.ui.UIUtil;
 import repl.simple.mathematica.MathREPLBundle;
 import repl.simple.mathematica.MathSessionWrapper;
 
@@ -53,8 +66,8 @@ public class MathREPLNewSession extends MathREPLKernelAction {
                     // Make it configurable
                     msw.call("setShowTiming", false);
                     msw.call("setTextSize", 10);
-
-
+                    // Do not use the front end to render plots
+                    msw.call("setFrontEndGraphics",false);
                     PropertiesComponent pc = PropertiesComponent.getInstance();
 
                     msw.call("setSyntaxColoring",Boolean.parseBoolean(pc.getValue("repl.simple.mathematica.syntax_highlight")));
@@ -91,6 +104,8 @@ public class MathREPLNewSession extends MathREPLKernelAction {
                                                     "JLink",
                                                     MathREPLBundle.message("connectionDisposed"),
                                                     NotificationType.INFORMATION).notify(e.getProject());
+                                            sessionId -= 1;
+                                            Sessions.put(c.getTabName(),false);
 
                                         } catch (NoSuchMethodException e1) {
                                             e1.printStackTrace();

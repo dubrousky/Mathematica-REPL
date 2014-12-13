@@ -17,73 +17,66 @@
 */
 package repl.simple.mathematica.Actions;
 
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
-import com.intellij.openapi.vcs.VcsShowConfirmationOption;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileSaverDescriptor;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
-import com.intellij.util.ui.ConfirmationDialog;
-import com.intellij.util.ui.DialogUtil;
-import repl.simple.mathematica.MathREPLBundle;
-import repl.simple.mathematica.MathSessionWrapper;
-
+import com.intellij.ui.content.ContentManager;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 
-
 /**
- * Terminates the kernel running in the active tab
+ * Saves the contents of the current session tab into file
  */
-public class MathREPLTerminateKernelAction extends MathREPLKernelAction {
-    public MathREPLTerminateKernelAction() {
-        super();
-    }
-
+public class MathREPLSaveText extends MathREPLKernelAction {
     public void update(AnActionEvent e)
     {
         ToolWindowManager twm = null;
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
+
         ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
 
         Content c = tw.getContentManager().getSelectedContent();
 
-        boolean enabled = null !=c && Sessions.containsKey(c.getTabName()) ? Sessions.get(c.getTabName()) : true;
+        boolean enabled = null!=c&&Sessions.containsKey(c.getTabName()) ? Sessions.get(c.getTabName()) : true;
 
         e.getPresentation().setEnabled(!enabled);
+
     }
-
+    @Override
     public void actionPerformed(AnActionEvent e) {
-
+        // get link status
         ToolWindowManager twm = null;
 
         twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
 
+
         ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
-        final MathSessionWrapper msw =  MathSessionWrapper.adopt(tw.getContentManager().getSelectedContent().getComponent());
+        ContentManager cm = tw.getContentManager();
+        Content c = cm.getSelectedContent();
+        Object jsp = c.getComponent();
         try {
-            // Confirm the action
-            if( ConfirmationDialog.requestForConfirmation(VcsShowConfirmationOption.STATIC_SHOW_CONFIRMATION,
-                    e.getProject(),
-                    MathREPLBundle.message("confirmTerminate"),
-                    "Confirm Dialog",
-                    null) )
-            {
-                msw.call("closeLink");
-                Sessions.put(tw.getContentManager().getSelectedContent().getTabName(), true);
-                new Notification("REPL",
-                        "JLink",
-                        MathREPLBundle.message("kernelStopped"),
-                        NotificationType.INFORMATION).notify(e.getProject());
-            }
-            // Change Toolbar appearance (name)
+            String s = (String) jsp.getClass().getMethod("getText").invoke(jsp);
+
+            FileWriter w = new FileWriter(
+                    FileChooser.chooseFile(new FileSaverDescriptor("", "Save Text", "m"), e.getProject(),
+                            e.getProject().getBaseDir()).getPath());
+                    w.write(s);
+            w.flush();
+            w.close();
+
+
+        } catch (IllegalAccessException e1) {
+            e1.printStackTrace();
+        } catch (InvocationTargetException e1) {
+            e1.printStackTrace();
         } catch (NoSuchMethodException e1) {
             e1.printStackTrace();
-        } catch (IllegalAccessException e2) {
-            e2.printStackTrace();
-        } catch (InvocationTargetException e3) {
-            e3.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     }
 }

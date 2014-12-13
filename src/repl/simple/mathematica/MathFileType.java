@@ -15,13 +15,42 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 package repl.simple.mathematica;
 
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-/*
-* Tool menu action group
-*/
-public class MathREPLActionGroup extends DefaultActionGroup {
+import com.intellij.openapi.fileTypes.LanguageFileType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+
+public class MathFileType extends LanguageFileType {
+    public static final MathFileType INSTANCE = new MathFileType();
+
+    private MathFileType() {
+        super(MathLanguage.INSTANCE);
+    }
+
+    @NotNull
+    @Override
+    public String getName() {
+        return "Workspace File";
+    }
+
+    @NotNull
+    @Override
+    public String getDescription() {
+        return "Mathematica REPL workspace";
+    }
+
+    @NotNull
+    @Override
+    public String getDefaultExtension() {
+        return "mws";
+    }
+
+    @Nullable
+    @Override
+    public Icon getIcon() {
+        return MathIcons.FILE;
+    }
 }

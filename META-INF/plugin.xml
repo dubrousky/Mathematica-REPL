@@ -87,6 +87,9 @@
       <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLNewSession" class="repl.simple.mathematica.Actions.MathREPLNewSession"
               text="New Session" description="Starts new session">
       </action>
+      <action id="MathREPL.repl.simple.mathematica.Actions.MathREPLSaveText" class="repl.simple.mathematica.Actions.MathREPLSaveText"
+              text="Save Text" description="Saves the session input as text">
+      </action>
       <group class="repl.simple.mathematica.MathREPLActionGroup"
              id="MathREPLActionGroup"
              text="Mathematica REPL"
@@ -99,6 +102,7 @@
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLStartKernelAction"/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateSelectionAction"/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLTerminateKernelAction"/>
+          <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLSaveText"/>
           <separator/>
           <add-to-group group-id="ToolsMenu" anchor="last"/>
       </group>

@@ -1,8 +1,27 @@
+/*
+    Mathematica REPL IntelliJ IDEA plugin
+    Copyright (C) 2014  Aliaksandr Dubrouski
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package repl.simple.mathematica.Actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
@@ -33,15 +52,9 @@ public class MathREPLEvaluateFileAction extends MathREPLKernelAction {
     }
     public void actionPerformed(AnActionEvent e) {
         // Open file selection, read through the link
-        Frame f = new Frame();
-        f.setSize(500, 500);
-        // get path for JLink java library
-        FileDialog fd = new FileDialog(f, "Path to the package file", FileDialog.LOAD);
-        //get current file as starting point
-        fd.setDirectory(e.getProject().getBasePath());
-        fd.setFile("*.m");
-        fd.setVisible(true);
-        final String path = fd.getDirectory()+fd.getFile();
+        final String path = FileChooser.chooseFile(new FileChooserDescriptor(true,false,false,false,false,false),
+                                                    e.getProject(),
+                                                    e.getProject().getBaseDir()).getPath();
         // Wait for response
         ToolWindow tw = null;
 
