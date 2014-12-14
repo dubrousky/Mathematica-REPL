@@ -54,6 +54,9 @@
   <depends>com.intellij.modules.lang</depends>
   <application-components>
     <!-- Add your application components here -->
+      <component>
+          <implementation-class>repl.simple.mathematica.MathREPLComponent</implementation-class>
+      </component>
   </application-components>
 
   <project-components>
