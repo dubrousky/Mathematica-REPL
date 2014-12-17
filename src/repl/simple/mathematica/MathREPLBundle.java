@@ -32,7 +32,7 @@ import java.util.ResourceBundle;
 public class MathREPLBundle {
     private static Reference<ResourceBundle> ourBundle;
     @NonNls
-    private static final String BUNDLE = "repl.simple.mathematica.resources.MathREPLMessages";
+    private static final String BUNDLE = "MathREPLMessages";
 
     public static String message(@NotNull @PropertyKey(
             resourceBundle = BUNDLE

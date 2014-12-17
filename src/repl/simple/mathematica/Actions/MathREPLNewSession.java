@@ -98,21 +98,22 @@ public class MathREPLNewSession extends MathREPLKernelAction {
                                 new Runnable() {
                                     @Override
                                     public void run() {
-                                        try {
-                                            msw.call("closeLink");
-                                            new Notification("REPL",
-                                                    "JLink",
-                                                    MathREPLBundle.message("connectionDisposed"),
-                                                    NotificationType.INFORMATION).notify(e.getProject());
-                                            sessionId -= 1;
-                                            Sessions.put(c.getTabName(),false);
-
-                                        } catch (NoSuchMethodException e1) {
-                                            e1.printStackTrace();
-                                        } catch (IllegalAccessException e1) {
-                                            e1.printStackTrace();
-                                        } catch (InvocationTargetException e1) {
-                                            e1.printStackTrace();
+                                        if(Sessions.get(c.getTabName())) {
+                                            try {
+                                                msw.call("closeLink");
+                                                new Notification("REPL",
+                                                        "JLink",
+                                                        MathREPLBundle.message("connectionDisposed"),
+                                                        NotificationType.INFORMATION).notify(e.getProject());
+                                                sessionId -= 1;
+                                                Sessions.put(c.getTabName(), false);
+                                            } catch (NoSuchMethodException e1) {
+                                                e1.printStackTrace();
+                                            } catch (IllegalAccessException e1) {
+                                                e1.printStackTrace();
+                                            } catch (InvocationTargetException e1) {
+                                                e1.printStackTrace();
+                                            }
                                         }
 
                                     }

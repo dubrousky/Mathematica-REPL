@@ -97,7 +97,7 @@
              id="MathREPLActionGroup"
              text="Mathematica REPL"
              description=""
-             icon="/repl/simple/mathematica/resources/icon-run.png"
+             icon="/icons/icon-run.png"
              popup="true">
           <separator/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLConfigureAction"/>
@@ -113,7 +113,7 @@
               id="MathREPLPopupActionGroup"
               text="Mathematica REPL"
               description=""
-              icon="/repl/simple/mathematica/resources/icon-run.png"
+              icon="/icons/icon-run.png"
               popup="true">
           <separator/>
           <reference id="MathREPL.repl.simple.mathematica.Actions.MathREPLEvaluateSelectionAction"/>
@@ -129,7 +129,7 @@
      <applicationConfigurable instance="repl.simple.mathematica.Ui.MathREPLSettings"></applicationConfigurable>
      <toolWindow id="Mathematica REPL"
                  canCloseContents="true"
-                 icon="/repl/simple/mathematica/resources/icon-run.png"
+                 icon="/icons/icon-run.png"
                  anchor="right"
                  factoryClass="repl.simple.mathematica.MathREPLToolWindowFactory" />
   </extensions>

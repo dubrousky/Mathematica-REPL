@@ -75,7 +75,6 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
                                         pc.getValue("repl.simple.mathematica.mathkernel_path"));
 
             try {
-                ResourceBundle rb = ResourceBundle.getBundle("repl.simple.mathematica.resources.MathREPLMessages");
                 msw.call("setLinkArguments", args);
                 // Set reasonable timeout to reach the kernel
                 msw.call("setConnectTimeout",(int)10000);
