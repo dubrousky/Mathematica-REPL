@@ -18,16 +18,11 @@
 package repl.simple.mathematica.Ui;
 
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.colors.EditorColorsScheme;
-import com.intellij.openapi.editor.colors.ex.DefaultColorSchemesManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.util.io.fs.FileSystem;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
-import sun.awt.windows.ThemeReader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -275,13 +270,13 @@ public class MathREPLSettings implements Configurable {
         confInst.setNativeLibPath(pc.getValue("repl.simple.mathematica.native_library_path", getNativeLibPath()));
         confInst.setMathLinkArgs(pc.getValue("repl.simple.mathematica.mathlink_args", getMathLinkArgs()));
 
-        confInst.background.setSelectedColor(Color.decode(pc.getOrInit("repl.simple.mathematica.background", Integer.toString(backgroundColor.getRGB()))));
-        confInst.textColor.setSelectedColor(Color.decode(pc.getOrInit("repl.simple.mathematica.text_color", Integer.toString(textColor.getRGB()))));
-        confInst.systemColor.setSelectedColor(Color.decode(pc.getOrInit("repl.simple.mathematica.system_color", Integer.toString(systemColor.getRGB()))));
-        confInst.stringColor.setSelectedColor(Color.decode(pc.getOrInit("repl.simple.mathematica.string_color", Integer.toString(stringColor.getRGB()))));
-        confInst.messageColor.setSelectedColor(Color.decode(pc.getOrInit("repl.simple.mathematica.message_color", Integer.toString(messageColor.getRGB()))));
-        confInst.commentColor.setSelectedColor(Color.decode(pc.getOrInit("repl.simple.mathematica.comment_color", Integer.toString(commentColor.getRGB()))));
-        confInst.promptColor.setSelectedColor(Color.decode(pc.getOrInit("repl.simple.mathematica.prompt_color", Integer.toString(promptColor.getRGB()))));
+        confInst.background.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.background", backgroundColor.getRGB())));
+        confInst.textColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.text_color", textColor.getRGB())));
+        confInst.systemColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.system_color", systemColor.getRGB())));
+        confInst.stringColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.string_color", stringColor.getRGB())));
+        confInst.messageColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.message_color", messageColor.getRGB())));
+        confInst.commentColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.comment_color",commentColor.getRGB())));
+        confInst.promptColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.prompt_color", promptColor.getRGB())));
         confInst.syntaxHighlight.setSelected(Boolean.parseBoolean(pc.getOrInit("repl.simple.mathematica.syntax_highlight", "true")));
 
     }

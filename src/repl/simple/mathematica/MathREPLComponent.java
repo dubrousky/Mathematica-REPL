@@ -32,8 +32,6 @@ public class MathREPLComponent implements ApplicationComponent {
     }
 
     public void initComponent() {
-        // TODO: insert component initialization logic here
-
         // Default path to the MathKernel executable path
         String mathKernelPath = "";
         // Default path to the native library directory
@@ -73,22 +71,33 @@ public class MathREPLComponent implements ApplicationComponent {
         Color messageColor = new Color(200,100,0);
         Color backgroundColor = new Color(255,255,255);
         Color stringColor = new Color(127,127,127);
+
         PropertiesComponent pc = PropertiesComponent.getInstance();
-        pc.getOrInit("repl.simple.mathematica.mathkernel_path", mathKernelPath);
-        pc.getOrInit("repl.simple.mathematica.mathlink_path", mathLinkPath);
-        pc.getOrInit("repl.simple.mathematica.native_library_path", nativeLibraryPath);
-        pc.getOrInit("repl.simple.mathematica.mathlink_args",mathLinkArgs );
+        if(!pc.isValueSet("repl.simple.mathematica.mathkernel_path"))
+            pc.setValue("repl.simple.mathematica.mathkernel_path", mathKernelPath);
+        if(!pc.isValueSet("repl.simple.mathematica.mathlink_path"))
+            pc.setValue("repl.simple.mathematica.mathlink_path", mathLinkPath);
+        if(!pc.isValueSet("repl.simple.mathematica.native_library_path"))
+            pc.setValue("repl.simple.mathematica.native_library_path", nativeLibraryPath);
+        if(!pc.isValueSet("repl.simple.mathematica.mathlink_args"))
+            pc.setValue("repl.simple.mathematica.mathlink_args", mathLinkArgs);
 
-        pc.getOrInitInt("repl.simple.mathematica.background", backgroundColor.getRGB());
-        pc.getOrInitInt("repl.simple.mathematica.text_color", textColor.getRGB());
-        pc.getOrInitInt("repl.simple.mathematica.system_color", systemColor.getRGB());
-        pc.getOrInitInt("repl.simple.mathematica.string_color", stringColor.getRGB());
-        pc.getOrInitInt("repl.simple.mathematica.message_color", messageColor.getRGB());
-        pc.getOrInitInt("repl.simple.mathematica.comment_color", commentColor.getRGB());
-        pc.getOrInitInt("repl.simple.mathematica.prompt_color", promptColor.getRGB());
-        pc.getOrInit("repl.simple.mathematica.syntax_highlight", "true");
-
-
+        if(!pc.isValueSet("repl.simple.mathematica.background"))
+            pc.setValue("repl.simple.mathematica.background", Integer.toString(backgroundColor.getRGB()));
+        if(!pc.isValueSet("repl.simple.mathematica.text_color"))
+            pc.setValue("repl.simple.mathematica.text_color", Integer.toString(textColor.getRGB()));
+        if(!pc.isValueSet("repl.simple.mathematica.system_color"))
+            pc.setValue("repl.simple.mathematica.system_color", Integer.toString(systemColor.getRGB()));
+        if(!pc.isValueSet("repl.simple.mathematica.string_color"))
+            pc.setValue("repl.simple.mathematica.string_color", Integer.toString(stringColor.getRGB()));
+        if(!pc.isValueSet("repl.simple.mathematica.message_color"))
+            pc.setValue("repl.simple.mathematica.message_color", Integer.toString(messageColor.getRGB()));
+        if(!pc.isValueSet("repl.simple.mathematica.comment_color"))
+            pc.setValue("repl.simple.mathematica.comment_color", Integer.toString(commentColor.getRGB()));
+        if(!pc.isValueSet("repl.simple.mathematica.prompt_color"))
+            pc.setValue("repl.simple.mathematica.prompt_color", Integer.toString(promptColor.getRGB()));
+        if(!pc.isValueSet("repl.simple.mathematica.syntax_highlight"))
+            pc.setValue("repl.simple.mathematica.syntax_highlight", "true");
     }
 
     public void disposeComponent() {
