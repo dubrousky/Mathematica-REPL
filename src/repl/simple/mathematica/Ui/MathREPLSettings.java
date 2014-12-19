@@ -84,11 +84,11 @@ public class MathREPLSettings implements Configurable {
             mathLinkPath = "";
         } else if(SystemInfo.isMac) {
             mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
-            mathLinkPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/JLink.jar";
+            mathLinkPath = "/Applications/Mathematica.app/Contents/SystemFiles/Links/JLink/JLink.jar";
             if( SystemInfo.is32Bit )
-                nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
+                nativeLibraryPath = "/Applications/Mathematica.app/Contents/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
             else
-                nativeLibraryPath = "/Applications/Mathematica.app/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64";
+                nativeLibraryPath = "/Applications/Mathematica.app/Contents/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64";
         } else if(SystemInfo.isLinux) {
             mathKernelPath = "/usr/local/bin/math";
             mathLinkPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/JLink.jar";
