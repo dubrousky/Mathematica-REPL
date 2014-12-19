@@ -2,7 +2,7 @@
   <id>repl.simple.mathematica.id</id>
     <category>Custom Languages</category>
   <name>Mathematica REPL</name>
-  <version>0.0.1</version>
+  <version>${project.version}</version>
   <vendor email="dubrousky@gmail.com"
           url="https://github.com/dubrousky/Mathematica-REPL"
           logo="repl/simple/mathematica/resources/icon-run.png">
@@ -36,11 +36,11 @@
   <change-notes><![CDATA[
       Change notes.<br>
       <ul>
-        <li>Added resource files using the resource bundles.</li>
-        <li>Refactored action system.</li>
-        <li>Added some actions to the context menu.</li>
-        <li>Added About action</li>
-        <li>Added error reporting dialog</li>
+        <li>Added validation of selected paths</li>
+        <li>Added kernel connection timeout and connection dissposal</li>
+        <li>Added actions to the title and tool window</li>
+        <li>Added color customisation</li>
+        <li>Fixed error reporting dialog missing in the plugin.xml</li>
       </ul><br>
       Full list of changes and bugfixes is available at <a href="https://github.com/dubrousky/Mathematica-REPL/wiki">Git</a>
       ]]>
