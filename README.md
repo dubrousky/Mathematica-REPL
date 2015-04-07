@@ -1,5 +1,7 @@
 # README #
 
+[![Join the chat at https://gitter.im/dubrousky/Mathematica-REPL](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dubrousky/Mathematica-REPL?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ### Mathematica REPL ###
 
 * This repository contains a proof-of-concept of a plugin for IntellyJIdea(TM) IDE for Wolfram Mathematica(TM) development
