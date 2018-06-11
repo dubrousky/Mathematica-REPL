@@ -20,9 +20,14 @@ package repl.simple.mathematica.Ui;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.projectRoots.ProjectJdkTable;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.SystemInfo;
+import com.intellij.ui.JBColor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
+import repl.simple.mathematica.MathREPLBundle;
+import repl.simple.mathematica.Sdk.MathREPLSdkType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,29 +83,61 @@ public class MathREPLSettings implements Configurable {
     private String mathLinkPath;
     // Initialize defaults according to the os/arch settings
     {
+        MathREPLSdkType replSdkType = MathREPLSdkType.getInstance();
+        Sdk replSdk = ProjectJdkTable.getInstance().findMostRecentSdkOfType(replSdkType);
         if(SystemInfo.isWindows) {
-            mathKernelPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\MathKernel";
-            nativeLibraryPath = "c:\\Program Files\\Wolfram Research\\Mathematica\\10.0.1\\SystemFiles\\Links\\JLink\\JLink.jar";
-            mathLinkPath = "";
+            if(replSdk != null) {
+                mathKernelPath = String.join(File.separator,replSdk.getHomePath(),
+                        MathREPLBundle.message("mathKernelPathWin"));
+                mathLinkPath = String.join(File.separator, replSdk.getHomePath(),
+                                           MathREPLBundle.message("mathLinkPathWin"));
+
+                if( SystemInfo.is32Bit )
+                    nativeLibraryPath = String.join(File.separator, replSdk.getHomePath(),
+                            MathREPLBundle.message("nativeLibraryPathWin32"));
+                else
+                    nativeLibraryPath = String.join(File.separator, replSdk.getHomePath(),
+                            MathREPLBundle.message("nativeLibraryPathWin64"));
+            } else {
+                mathKernelPath = nativeLibraryPath = mathLinkPath = replSdk.getHomePath();
+            }
         } else if(SystemInfo.isMac) {
-            mathKernelPath = "/Applications/Mathematica.app/Contents/MacOS/MathKernel";
-            mathLinkPath = "/Applications/Mathematica.app/Contents/SystemFiles/Links/JLink/JLink.jar";
-            if( SystemInfo.is32Bit )
-                nativeLibraryPath = "/Applications/Mathematica.app/Contents/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX";
-            else
-                nativeLibraryPath = "/Applications/Mathematica.app/Contents/SystemFiles/Links/JLink/SystemFiles/Libraries/MacOSX-x86-64";
+            if(replSdk != null) {
+                mathKernelPath = String.join(File.separator,replSdk.getHomePath(),
+                        MathREPLBundle.message("mathKernelPathMacOSX"));
+                mathLinkPath = String.join(File.separator, replSdk.getHomePath(),
+                        MathREPLBundle.message("mathLinkPathMacOSX"));
+                if( SystemInfo.is32Bit )
+                    nativeLibraryPath = String.join(File.separator, replSdk.getHomePath(),
+                            MathREPLBundle.message("nativeLibraryPathMacOSX32"));
+                else
+                    nativeLibraryPath = String.join(File.separator, replSdk.getHomePath(),
+                            MathREPLBundle.message("nativeLibraryPathMacOSX64"));
+            } else {
+
+            }
         } else if(SystemInfo.isLinux) {
-            mathKernelPath = "/usr/local/bin/math";
-            mathLinkPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/JLink.jar";
-            if( SystemInfo.is32Bit )
-                nativeLibraryPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/SystemFiles/Libraries/Linux";
-            else
-                nativeLibraryPath = "/usr/local/Wolfram/Mathematica/10.0/SystemFiles/Links/JLink/SystemFiles/Libraries/Linux-x86-64";
+            if(replSdk != null) {
+                mathKernelPath = MathREPLBundle.message("mathKernelPathLinux");
+                mathLinkPath = String.join(File.separator, replSdk.getHomePath(),
+                        MathREPLBundle.message("mathLinkPathLinux"));
+                if (SystemInfo.is32Bit)
+                    nativeLibraryPath = String.join(File.separator, replSdk.getHomePath(),
+                            MathREPLBundle.message("nativeLibraryPathLinux32"));
+                else
+                    nativeLibraryPath = String.join(File.separator, replSdk.getHomePath(),
+                            MathREPLBundle.message("nativeLibraryPathLinux64"));
+            } else {
+                mathKernelPath = nativeLibraryPath = mathLinkPath = replSdk.getHomePath();
+            }
         }
     }
 
     // Default MathLink arguments
-    private String mathLinkArgs = "-linkmode launch -linkname \"%s\" -mathlink";
+    private String mathLinkArgs;
+    {
+        mathLinkArgs = MathREPLBundle.message("mathLinkArgs");
+    }
 
 
 
@@ -178,25 +215,7 @@ public class MathREPLSettings implements Configurable {
         PropertiesComponent pc = PropertiesComponent.getInstance();
 
         // Set the paths from persistence or default
-        // Set math paths
-        confInst.setMathKernelPath(pc.getOrInit("repl.simple.mathematica.mathkernel_path", getMathKernelPath()));
-        confInst.setMathLinkPath(pc.getOrInit("repl.simple.mathematica.mathlink_path", getMathLinkPath()));
-        confInst.setNativeLibPath(pc.getOrInit("repl.simple.mathematica.native_library_path", getNativeLibPath()));
-        confInst.setMathLinkArgs(pc.getOrInit("repl.simple.mathematica.mathlink_args", getMathLinkArgs()));
-        // Set colors
-        /* TODO: Add configuration based on the current theme
-        EditorColorsManager esm = EditorColorsManager.getInstance();
-        EditorColorsScheme scheme = esm.getGlobalScheme();
-        confInst.background.setSelectedColor(scheme.getDefaultBackground());
-        */
-        confInst.background.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.background",backgroundColor.getRGB())));
-        confInst.textColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.text_color", textColor.getRGB())));
-        confInst.systemColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.system_color", systemColor.getRGB())));
-        confInst.stringColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.string_color", stringColor.getRGB())));
-        confInst.messageColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.message_color",messageColor.getRGB())));
-        confInst.commentColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.comment_color", commentColor.getRGB())));
-        confInst.promptColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.prompt_color", promptColor.getRGB())));
-        confInst.syntaxHighlight.setSelected(Boolean.parseBoolean(pc.getOrInit("repl.simple.mathematica.syntax_highlight", "true")));
+        reset();
         return confInst.getRootPanel();
     }
 
@@ -262,22 +281,36 @@ public class MathREPLSettings implements Configurable {
      */
     @Override
     public void reset() {
-
-        PropertiesComponent pc = PropertiesComponent.getInstance();
         // reset form to persistent values or defaults
-        confInst.setMathKernelPath(pc.getValue("repl.simple.mathematica.mathkernel_path",getMathKernelPath()));
+        PropertiesComponent pc = PropertiesComponent.getInstance();
+
+        // Set the paths from persistence or default
+        // Set math paths
+        confInst.setMathKernelPath(pc.getValue("repl.simple.mathematica.mathkernel_path", getMathKernelPath()));
         confInst.setMathLinkPath(pc.getValue("repl.simple.mathematica.mathlink_path", getMathLinkPath()));
         confInst.setNativeLibPath(pc.getValue("repl.simple.mathematica.native_library_path", getNativeLibPath()));
         confInst.setMathLinkArgs(pc.getValue("repl.simple.mathematica.mathlink_args", getMathLinkArgs()));
-
-        confInst.background.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.background", backgroundColor.getRGB())));
-        confInst.textColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.text_color", textColor.getRGB())));
-        confInst.systemColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.system_color", systemColor.getRGB())));
-        confInst.stringColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.string_color", stringColor.getRGB())));
-        confInst.messageColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.message_color", messageColor.getRGB())));
-        confInst.commentColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.comment_color",commentColor.getRGB())));
-        confInst.promptColor.setSelectedColor(new Color(pc.getOrInitInt("repl.simple.mathematica.prompt_color", promptColor.getRGB())));
-        confInst.syntaxHighlight.setSelected(Boolean.parseBoolean(pc.getOrInit("repl.simple.mathematica.syntax_highlight", "true")));
+        // Set colors
+        /* TODO: Add configuration based on the current theme
+        EditorColorsManager esm = EditorColorsManager.getInstance();
+        EditorColorsScheme scheme = esm.getGlobalScheme();
+        confInst.background.setSelectedColor(scheme.getDefaultBackground());
+        */
+        confInst.background.setSelectedColor(new JBColor(new Color(pc.getInt("repl.simple.mathematica.background", backgroundColor.getRGB())),
+                new Color(pc.getInt("repl.simple.mathematica.background", backgroundColor.getRGB()))));
+        confInst.textColor.setSelectedColor(new JBColor(new Color(pc.getInt("repl.simple.mathematica.text_color", textColor.getRGB())),
+                new Color(pc.getInt("repl.simple.mathematica.text_color", textColor.getRGB()))));
+        confInst.systemColor.setSelectedColor(new JBColor(new Color(pc.getInt("repl.simple.mathematica.system_color", systemColor.getRGB())),
+                new Color(pc.getInt("repl.simple.mathematica.system_color", systemColor.getRGB()))));
+        confInst.stringColor.setSelectedColor(new JBColor(new Color(pc.getInt("repl.simple.mathematica.string_color", stringColor.getRGB())),
+                new Color(pc.getInt("repl.simple.mathematica.string_color", stringColor.getRGB()))));
+        confInst.messageColor.setSelectedColor(new JBColor(new Color(pc.getInt("repl.simple.mathematica.message_color", messageColor.getRGB())),
+                new Color(pc.getInt("repl.simple.mathematica.message_color", messageColor.getRGB()))));
+        confInst.commentColor.setSelectedColor(new JBColor(new Color(pc.getInt("repl.simple.mathematica.comment_color", commentColor.getRGB())),
+                new Color(pc.getInt("repl.simple.mathematica.comment_color", commentColor.getRGB()))));
+        confInst.promptColor.setSelectedColor(new JBColor(new Color(pc.getInt("repl.simple.mathematica.prompt_color", promptColor.getRGB())),
+                new Color(pc.getInt("repl.simple.mathematica.prompt_color", promptColor.getRGB()))));
+        confInst.syntaxHighlight.setSelected(Boolean.parseBoolean(pc.getValue("repl.simple.mathematica.syntax_highlight", "true")));
 
     }
 
@@ -289,6 +322,6 @@ public class MathREPLSettings implements Configurable {
         confInst = null;
     }
 
-    public String getPluginVersion() { return "0.0.2"; }
+    public String getPluginVersion() { return "0.0.3"; }
 
 }

@@ -1,11 +1,10 @@
-<idea-plugin version="2">
+<idea-plugin>
   <id>repl.simple.mathematica.id</id>
     <category>Custom Languages</category>
   <name>Mathematica REPL</name>
   <version>${project.version}</version>
   <vendor email="dubrousky@gmail.com"
-          url="https://github.com/dubrousky/Mathematica-REPL"
-          logo="repl/simple/mathematica/resources/icon-run.png">
+          url="https://github.com/dubrousky/Mathematica-REPL">
       Aliaksandr Dubrouski
   </vendor>
   <description><![CDATA[
@@ -37,7 +36,7 @@
       Change notes.<br>
       <ul>
         <li>Added validation of selected paths</li>
-        <li>Added kernel connection timeout and connection dissposal</li>
+        <li>Added kernel connection timeout and connection disposal</li>
         <li>Added actions to the title and tool window</li>
         <li>Added color customisation</li>
         <li>Fixed error reporting dialog missing in the plugin.xml</li>
@@ -47,7 +46,7 @@
   </change-notes>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="107.105"/>
+  <idea-version since-build="171"/>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
@@ -125,8 +124,9 @@
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
+     <sdkType id="Mathematica REPL SDK" implementation="repl.simple.mathematica.Sdk.MathREPLSdkType"/>
      <errorHandler implementation="repl.simple.mathematica.ErrorReporter"/>
-     <applicationConfigurable instance="repl.simple.mathematica.Ui.MathREPLSettings"></applicationConfigurable>
+     <applicationConfigurable instance="repl.simple.mathematica.Ui.MathREPLSettings"/>
      <toolWindow id="Mathematica REPL"
                  canCloseContents="true"
                  icon="/icons/icon-run.png"

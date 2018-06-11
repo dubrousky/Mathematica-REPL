@@ -21,7 +21,7 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
@@ -44,8 +44,8 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
     }
     public void update(AnActionEvent e)
     {
-        ToolWindowManager twm = null;
-        twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
+        ToolWindowManager twm;
+        twm = ToolWindowManager.getInstance(CommonDataKeys.PROJECT.getData(e.getDataContext()));
         ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
 
         Content c = tw.getContentManager().getSelectedContent();
@@ -61,7 +61,7 @@ public class MathREPLStartKernelAction extends MathREPLKernelAction {
         // get link status
         ToolWindowManager twm = null;
 
-        twm = ToolWindowManager.getInstance(DataKeys.PROJECT.getData(e.getDataContext()));
+        twm = ToolWindowManager.getInstance(CommonDataKeys.PROJECT.getData(e.getDataContext()));
 
 
         ToolWindow tw = twm.getToolWindow(TOOL_WINDOW);
